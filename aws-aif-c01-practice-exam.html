@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AIF-C01 practice exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F5;--surface:#FFFFFF;--surface2:#F5F7FA;--ink:#172031;--muted:#5A667A;--line:#D8DEE7;--line-strong:#A9B4C4;
+  --accent:#1F5FAD;--accent-soft:#E2EBF7;--on-accent:#FFFFFF;--warn:#9A4A08;--warn-soft:#FBEADB;
+  --ok:#1E7F55;--ok-soft:#DDF1E6;--bad:#B0364A;--bad-soft:#F8E1E5;
+  --d1:#6A4DB8;--d2:#B0364A;--d3:#1F5FAD;--d4:#27805F;--d5:#9A5B10;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+    --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;
+    --ok:#62C695;--ok-soft:#173528;--bad:#EE8394;--bad-soft:#3D1D24;
+    --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;--d5:#EEBB7A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+  --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;
+  --ok:#62C695;--ok-soft:#173528;--bad:#EE8394;--bad-soft:#3D1D24;
+  --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;--d5:#EEBB7A;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:900px;margin:0 auto;padding:28px 20px 90px}
+.tbtn{font-size:15px;padding:9px 14px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--ink)}
+.tbtn:disabled{opacity:.45;cursor:not-allowed}
+.tbtn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface)}
+
+/* Start */
+h1{font-size:clamp(30px,4.6vw,48px);line-height:1.02;letter-spacing:-0.025em;margin:0;max-width:16ch}
+.sub{color:var(--muted);max-width:64ch;margin:10px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:6px 26px;margin:20px 0}
+.facts div{display:flex;gap:7px;align-items:baseline}
+.facts dt{color:var(--muted);font-size:14px}
+.facts dd{margin:0;font-weight:700}
+.dombar{display:flex;gap:6px;margin:0 0 26px}
+.dom{flex:var(--w) 1 0;min-width:0;border-top:5px solid var(--dc);border-radius:4px 4px 12px 12px;padding:10px 12px 12px;background:color-mix(in srgb,var(--dc) 11%,var(--surface))}
+.dom .pct{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:26px;font-weight:700;color:var(--dc);line-height:1;display:block}
+.dom .dn{font-size:13.5px;display:block;margin-top:5px;line-height:1.25}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode{text-align:left;border:1px solid var(--line-strong);background:var(--surface);border-radius:14px;padding:18px;cursor:pointer}
+.mode:hover{border-color:var(--ink)}
+.mode h2{margin:0 0 4px;font-size:22px}
+.mode p{margin:0;color:var(--muted);font-size:15.5px}
+.opts{display:flex;flex-wrap:wrap;gap:8px 22px;margin:16px 0 0;font-size:15.5px}
+.opts label{display:flex;gap:7px;align-items:center;cursor:pointer}
+.resume{margin:18px 0 0;padding:14px 16px;border-radius:12px;background:var(--accent-soft);display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.resume p{margin:0}
+.hist{margin-top:34px}
+.hist h2{font-size:22px;margin:0 0 8px}
+.hist table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+.hist th,.hist td{padding:8px 12px;text-align:left;border-top:1px solid var(--line)}
+.hist thead th{background:var(--surface2);border-top:0;font-family:"Bricolage Grotesque",system-ui,sans-serif}
+.note{color:var(--muted);font-size:14.5px;max-width:72ch;margin:26px 0 0}
+
+/* Run */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar .count{font-weight:700;font-variant-numeric:tabular-nums}
+.bar .timer{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:auto}
+.bar .timer.low{color:var(--bad)}
+.pbar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;flex:1 1 100%}
+.pbar div{height:100%;background:var(--accent);width:0}
+details.map{margin:0 0 16px}
+details.map summary{cursor:pointer;color:var(--muted);font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:5px;margin-top:10px}
+.grid button{height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px;font-variant-numeric:tabular-nums;position:relative}
+.grid button.ans{background:var(--accent-soft);border-color:var(--accent-soft)}
+.grid button.ok{background:var(--ok-soft);border-color:var(--ok)}
+.grid button.no{background:var(--bad-soft);border-color:var(--bad)}
+.grid button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.grid button.fl::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--warn)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 22px 20px}
+.qmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.dchip{font-size:13px;color:var(--dc);border:1px solid color-mix(in srgb,var(--dc) 45%,transparent);padding:1px 9px;border-radius:99px}
+.flag{margin-left:auto;font-size:14px;padding:5px 10px}
+.flag[aria-pressed="true"]{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.qtext{font-size:19px;line-height:1.5;margin:0 0 6px}
+.choose{font-weight:700;color:var(--accent);margin:0 0 12px}
+.olist{display:grid;gap:8px;margin-top:14px}
+.opt{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line-strong);border-radius:12px;cursor:pointer;background:var(--surface)}
+.opt:hover{border-color:var(--ink)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .ltr{width:28px;height:28px;display:grid;place-items:center;border:1.5px solid var(--line-strong);font-weight:700;font-size:14px;border-radius:50%}
+.opt.multi .ltr{border-radius:7px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .ltr{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.opt.locked{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .ltr{background:var(--bad);border-color:var(--bad);color:#fff}
+.fb{margin-top:16px;padding:14px 16px;border-radius:12px;border-left:4px solid var(--fbc);background:color-mix(in srgb,var(--fbc) 10%,var(--surface))}
+.fb b.v{color:var(--fbc);display:block;margin-bottom:4px;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:18px}
+.fb p{margin:0}
+.nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.nav .sp{flex:1}
+.hint{color:var(--muted);font-size:13.5px;margin:14px 0 0}
+
+/* Results */
+.score{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:6px 0 4px}
+.score .big{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:clamp(56px,10vw,92px);font-weight:700;line-height:1;letter-spacing:-0.03em}
+.score .of{color:var(--muted);font-size:18px}
+.verdict{margin:6px 0 22px;max-width:68ch}
+.verdict b{color:var(--vc)}
+.drows{display:grid;gap:10px;margin-bottom:28px}
+.drow{display:grid;grid-template-columns:250px 1fr 70px;gap:12px;align-items:center;font-size:15.5px}
+.drow .tr{height:12px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.drow .tr div{height:100%;background:var(--dc)}
+.drow .tr::after{content:"";position:absolute;left:70%;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.35}
+.drow .pc{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.rfilter{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.rev{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;border-left:5px solid var(--rc)}
+.rev h3{font-size:15px;margin:0 0 6px;color:var(--muted);font-weight:500;display:flex;gap:10px;flex-wrap:wrap}
+.rev .qt{margin:0 0 10px;font-size:17px}
+.rev ul{margin:0 0 10px;padding:0;list-style:none;display:grid;gap:4px}
+.rev li{padding:5px 10px;border-radius:8px;font-size:15.5px}
+.rev li.c{background:var(--ok-soft)}
+.rev li.w{background:var(--bad-soft)}
+.rev li .tg{font-size:12.5px;font-weight:700;margin-left:6px}
+.rev .ex{margin:0;font-size:15.5px;padding-left:11px;border-left:3px solid var(--warn)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px}
+@media (max-width:700px){.modes{grid-template-columns:1fr}.dombar{flex-wrap:wrap}.dom{flex:1 1 40%}.drow{grid-template-columns:1fr 60px}.drow .tr{grid-column:1/-1;grid-row:2}.qcard{padding:18px 16px}.qtext{font-size:18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start">
+  <h1>AIF-C01 practice exam</h1>
+  <p class="sub">65 original questions written in the style of the real AWS Certified AI Practitioner exam: scenario-based, single answer or "Choose TWO", weighted by the official domains. Every question has an explanation of why the right answer is right and why the others are wrong.</p>
+  <dl class="facts">
+    <div><dt>Questions</dt><dd>65</dd></div>
+    <div><dt>Real exam time</dt><dd>90 minutes</dd></div>
+    <div><dt>Target</dt><dd>75%+ before booking</dd></div>
+    <div><dt>Exam</dt><dd>AIF-C01</dd></div>
+  </dl>
+  <div class="dombar" id="dombar"></div>
+  <div class="modes">
+    <button class="mode" data-mode="exam"><h2>Exam mode</h2><p>90-minute timer, flag questions for review, no feedback until you finish. Use this to test readiness.</p></button>
+    <button class="mode" data-mode="practice"><h2>Practice mode</h2><p>No timer. Check each answer and read the explanation right away. Use this to learn.</p></button>
+  </div>
+  <div class="opts">
+    <label><input type="checkbox" id="optShufQ" checked> Shuffle question order</label>
+    <label><input type="checkbox" id="optShufA" checked> Shuffle answer order</label>
+  </div>
+  <div class="resume" id="resume" hidden><p id="resumeText"></p><div style="display:flex;gap:8px"><button class="tbtn primary" id="resumeBtn">Resume</button><button class="tbtn" id="discardBtn">Discard</button></div></div>
+  <div class="resume" id="lastRes" hidden><p id="lastResText"></p><button class="tbtn primary" id="lastResBtn">See last results and mistakes</button></div>
+  <div class="hist" id="hist" hidden><h2>Your attempts</h2><div id="histTable"></div></div>
+  <p class="note">These are not leaked exam questions. Using real exam content ("dumps") breaks the AWS Certification Program Agreement and can get a certification revoked. They cover the same topics at the same depth. For more official practice, AWS Skill Builder has a free official practice question set for AIF-C01. Studying a topic? Open the <a href="https://claude.ai/artifact/AHsL7dne3nP22Ji51SNiA7" target="_blank" rel="noopener">field guide</a>.</p>
+</section>
+
+<section id="run" hidden>
+  <div class="bar">
+    <span class="count" id="count"></span>
+    <button class="tbtn" id="exitBtn">Save and exit</button>
+    <button class="tbtn primary" id="finishBtn">Finish exam</button>
+    <span class="timer" id="timer"></span>
+    <div class="pbar"><div id="pfill"></div></div>
+  </div>
+  <details class="map" id="map"><summary>Question map</summary><div class="grid" id="grid"></div><div class="legend" id="legend"></div></details>
+  <div class="qcard" id="qcard"></div>
+  <p class="hint">Keys: <kbd>A</kbd>–<kbd>E</kbd> choose, <kbd>F</kbd> flag, <kbd>←</kbd> <kbd>→</kbd> move, <kbd>Enter</kbd> check (practice).</p>
+</section>
+
+<section id="result" hidden>
+  <h1 style="font-size:clamp(26px,4vw,38px)">Results</h1>
+  <div class="score"><span class="big" id="rPct"></span><span class="of" id="rRaw"></span></div>
+  <p class="verdict" id="rVerdict"></p>
+  <div class="drows" id="rDom"></div>
+  <div class="acts">
+    <button class="tbtn primary" id="againBtn">New attempt</button>
+    <button class="tbtn" id="wrongBtn">Retake only the ones I missed</button>
+    <button class="tbtn" id="homeBtn">Back to start</button>
+    <button class="tbtn" id="copyBtn">Copy my mistakes for Claude</button>
+  </div>
+  <div id="copyBox" hidden style="margin:0 0 24px"><p class="hint" id="copyMsg" style="margin:0 0 6px"></p><textarea id="copyTa" readonly style="width:100%;min-height:180px;font:14px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)"></textarea></div>
+  <h2 style="margin:0 0 6px">Review</h2>
+  <div class="rfilter" id="rFilter">
+    <button class="tbtn" data-f="all" aria-pressed="false">All</button>
+    <button class="tbtn" data-f="wrong" aria-pressed="true">Wrong or unanswered</button>
+    <button class="tbtn" data-f="flag" aria-pressed="false">Flagged</button>
+  </div>
+  <div id="rList"></div>
+</section>
+
+</div>
+<script>
+const DOM={1:{n:"Fundamentals of AI and ML",w:20},2:{n:"Fundamentals of Generative AI",w:24},3:{n:"Applications of Foundation Models",w:28},4:{n:"Guidelines for Responsible AI",w:14},5:{n:"Security, Compliance and Governance",w:14}};
+
+const Q=[
+/* ---------- Domain 1: 13 ---------- */
+{d:1,q:"Which statement correctly describes the relationship between artificial intelligence (AI), machine learning (ML), deep learning and generative AI?",o:["Generative AI contains deep learning, which contains ML, which contains AI","AI contains ML, which contains deep learning, which contains generative AI","ML and AI are unrelated fields that both contain deep learning","Deep learning contains AI, ML and generative AI"],a:[1],e:"They are nested from broadest to narrowest: AI > machine learning > deep learning > generative AI. Generative AI is a specific application of deep learning models."},
+{d:1,q:"A bank has five years of transactions, each already marked as fraudulent or legitimate, and wants to predict whether new transactions are fraudulent. Which type of machine learning is this?",o:["Unsupervised learning","Reinforcement learning","Supervised learning","Semi-supervised clustering"],a:[2],e:"The training data has labels (fraud or not) and the target is a category, so it is supervised learning, specifically classification. Unsupervised learning works without labels; reinforcement learning learns from rewards in an environment."},
+{d:1,q:"A retailer wants to group customers into segments based on purchasing behavior. There are no predefined categories and no labeled data. Which approach should it use?",o:["Supervised classification","Unsupervised learning (clustering)","Reinforcement learning","Regression"],a:[1],e:"With no labels and no known categories, clustering discovers the groups. Supervised methods require labeled examples; regression predicts numbers."},
+{d:1,q:"A model learns to control a robot by trying actions and receiving a numeric reward or penalty after each one. Which learning paradigm is this?",o:["Supervised learning","Unsupervised learning","Transfer learning","Reinforcement learning"],a:[3],e:"An agent acting in an environment and learning from rewards is reinforcement learning. AWS DeepRacer is the classic AWS example."},
+{d:1,q:"A company wants to predict the expected delivery time in minutes for each order. Which type of problem is this?",o:["Regression","Binary classification","Clustering","Multi-class classification"],a:[0],e:"Predicting a continuous numeric value is regression. Classification predicts discrete categories; clustering groups unlabeled data."},
+{d:1,q:"A model reaches 99% accuracy on training data but only 62% on new data. What is happening?",o:["Underfitting","Overfitting","Data drift","Class imbalance"],a:[1],e:"Overfitting means the model memorized the training data instead of learning general patterns. Fix it with more or more diverse data, regularization, early stopping or a simpler model. Underfitting would show poor performance on both sets."},
+{d:1,q:"Which of the following is a hyperparameter?",o:["The weights learned during training","The learning rate","The label column in the dataset","The prediction returned by the model"],a:[1],e:"Hyperparameters are set before training (learning rate, batch size, number of epochs). Weights are parameters learned during training."},
+{d:1,q:"Which business problem is LEAST appropriate for a machine learning solution?",o:["Predicting customer churn from historical behavior","Detecting defective parts in product photos","Calculating sales tax using fixed published rates","Forecasting next quarter's product demand"],a:[2],e:"Tax calculation follows deterministic, known rules, so a simple rules engine is cheaper, exact and auditable. ML is for problems where patterns must be learned from data and probabilistic answers are acceptable."},
+{d:1,q:"A manufacturer wants to automatically detect scratches on parts using photos from a production line camera. Which AI field does this use case belong to?",o:["Natural language processing","Computer vision","Speech recognition","Time-series forecasting"],a:[1],e:"Analyzing images is computer vision. Amazon Rekognition Custom Labels or a SageMaker model could implement it."},
+{d:1,q:"Why is a dataset split into training, validation and test sets?",o:["To reduce the cost of storing the data","To let the model train faster on smaller batches","To measure how the model performs on data it has never seen","To remove personally identifiable information"],a:[2],e:"The test (holdout) set gives an unbiased estimate of performance on unseen data, and the validation set guides tuning. Evaluating only on the training data hides overfitting."},
+{d:1,q:"Six months after deployment, a model's predictions become noticeably less accurate because customer behavior has changed. What is this called, and which service detects it?",o:["Overfitting, detected by SageMaker Autopilot","Model drift, detected by SageMaker Model Monitor","Data leakage, detected by SageMaker Clarify","Underfitting, detected by SageMaker Debugger"],a:[1],e:"When real-world data shifts away from the training distribution, the model drifts. SageMaker Model Monitor watches deployed models for data quality, drift and bias drift and alerts through CloudWatch, so the model can be retrained."},
+{d:1,q:"What does MLOps refer to?",o:["Applying DevOps practices to automate, deploy, monitor and govern machine learning models","Encrypting machine learning datasets at rest and in transit","Labeling training data with a human workforce","Selecting the optimal EC2 instance type for training"],a:[0],e:"MLOps covers versioning data, code and models, automated training and deployment pipelines, monitoring in production and retraining. On AWS this means SageMaker Pipelines, Model Registry, Model Monitor and Experiments."},
+{d:1,q:"Which TWO statements about unsupervised learning are correct? (Choose TWO.)",o:["It requires a labeled target value for every record","It is commonly used for clustering and anomaly detection","It learns from rewards given by an environment","It works with unlabeled data","It can only be used with image data"],a:[1,3],e:"Unsupervised learning finds structure in unlabeled data, typically for clustering, anomaly detection and dimensionality reduction. Labels belong to supervised learning, and rewards belong to reinforcement learning."},
+
+/* ---------- Domain 2: 16 ---------- */
+{d:2,q:"What is a foundation model?",o:["A small model trained for one specific task on labeled data","A large model pre-trained on massive amounts of data that can be adapted to many different tasks","A rules engine that generates text from templates","A database of embeddings used for semantic search"],a:[1],e:"Foundation models are pre-trained on huge, mostly unlabeled datasets and then adapted through prompting, RAG or fine-tuning to many downstream tasks, which is far cheaper than training a model per task."},
+{d:2,q:"Amazon Bedrock charges for text models based on what unit?",o:["Tokens processed as input and generated as output","Hours the model is loaded in memory","Number of users accessing the application","Gigabytes of training data uploaded"],a:[0],e:"On-demand Bedrock pricing is per input and output token. Because a token averages about four characters in English, longer prompts and answers cost more, so trimming prompts is a real cost optimization."},
+{d:2,q:"What is the purpose of embeddings in a generative AI application?",o:["To compress models so they run on smaller instances","To represent text or images as numeric vectors that capture semantic meaning for similarity search","To encrypt prompts before they are sent to the model","To convert model outputs into speech"],a:[1],e:"Embeddings place semantically similar content close together in vector space, which is what makes semantic search, recommendations and the retrieval step of RAG possible."},
+{d:2,q:"A team wants a model's answers to be as consistent and focused as possible for a compliance chatbot. Which inference parameter change helps?",o:["Increase the temperature","Decrease the temperature","Increase the maximum token limit","Add more stop sequences"],a:[1],e:"Lower temperature makes the model favor the most likely tokens, giving more deterministic, focused answers. Higher temperature increases randomness and creativity. Max tokens only limits length."},
+{d:2,q:"A generative AI assistant confidently states a product policy that does not exist. What is this behavior called?",o:["Data drift","Overfitting","Hallucination","Prompt injection"],a:[2],e:"A hallucination is plausible-sounding but false output, caused by the model predicting likely text rather than retrieving facts. Grounding the model with RAG, lowering temperature, using Bedrock Guardrails contextual grounding checks, and human review all reduce it."},
+{d:2,q:"Which TWO are limitations of generative AI that a team should plan for? (Choose TWO.)",o:["Responses can be non-deterministic for the same prompt","Models can produce factually incorrect content","Models cannot process text longer than one sentence","Foundation models cannot be customized in any way","Inference always requires training a new model first"],a:[0,1],e:"Generation samples from a probability distribution, so outputs vary, and models can hallucinate. Context windows handle far more than a sentence, models can be customized through prompting, RAG and fine-tuning, and inference uses an already-trained model."},
+{d:2,q:"A model can accept both an image and a text question in the same request and answer about the image. How is such a model described?",o:["Multimodal","Multi-tenant","Unsupervised","Deterministic"],a:[0],e:"Multimodal models handle more than one data type, such as text plus images. Amazon Nova and Anthropic Claude models in Bedrock support image plus text input."},
+{d:2,q:"What does a model's context window define?",o:["The number of users who can query the model at once","How long the model retains conversations in a database","The maximum number of tokens the model can consider, including the prompt and the generated response","The geographic Region where the model runs"],a:[2],e:"The context window is the token budget for a single request. A use case that must process long documents in one call needs a model with a large context window."},
+{d:2,q:"Which architectural mechanism allows modern large language models to weigh the relationships between all words in a sequence?",o:["Convolution","Self-attention in the transformer architecture","Gradient boosting","K-means clustering"],a:[1],e:"Transformers use self-attention so every token can attend to every other token, capturing context and long-range dependencies, and they train efficiently in parallel."},
+{d:2,q:"Which TWO are advantages of building generative AI applications on Amazon Bedrock rather than self-hosting models? (Choose TWO.)",o:["No infrastructure to provision or manage, with pay-as-you-go pricing","Access to multiple foundation models from different providers through one API","Guaranteed elimination of all hallucinations","Your prompts are automatically used to improve the base models","Unlimited free usage of all models"],a:[0,1],e:"Bedrock is serverless, billed per token, and offers models from Amazon, Anthropic, Meta, Mistral, Cohere and others through one API. It does not eliminate hallucination, usage is paid, and your data is not used to train the base models."},
+{d:2,q:"A company is choosing a foundation model. Which TWO factors are relevant selection criteria? (Choose TWO.)",o:["Cost per token and latency","Support for the required modality, such as text or images","The number of Availability Zones in the Region","The color scheme of the console","The number of IAM users in the account"],a:[0,1],e:"Model selection weighs modality and task fit, quality on your own evaluation data, cost, latency, context window size, customization support and licensing."},
+{d:2,q:"How are foundation models typically pre-trained?",o:["With self-supervised learning on massive amounts of unlabeled data","With fully labeled datasets created by human annotators","With reinforcement learning only","By copying weights from a rules engine"],a:[0],e:"Pre-training generates labels from the data itself, for example predicting the next token, which is why models can learn from internet-scale unlabeled text. Human feedback and labeled data come later, during alignment and fine-tuning."},
+{d:2,q:"In generative AI terminology, what is the completion?",o:["The instruction sent to the model","The output generated by the model in response to the prompt","The dataset used for pre-training","The maximum number of tokens allowed"],a:[1],e:"The prompt is the input; the completion (or inference result) is the generated output."},
+{d:2,q:"Why would a generative AI application store document embeddings in a vector database?",o:["To back up the foundation model weights","To retrieve the passages most semantically similar to a user's question","To reduce the number of tokens a model can produce","To encrypt the documents at rest"],a:[1],e:"Retrieval by vector similarity is the core of RAG. On AWS the vector store can be OpenSearch Serverless, Aurora or RDS PostgreSQL with pgvector, Neptune Analytics, DocumentDB, MemoryDB or a partner service."},
+{d:2,q:"A support team wants to turn long email threads into short summaries. Which generative AI capability does this use?",o:["Summarization","Clustering","Anomaly detection","Data labeling"],a:[0],e:"Summarization is a core text-generation capability of foundation models, along with question answering, translation, classification, code generation and chat."},
+{d:2,q:"Why can the same prompt return different answers on different calls?",o:["The model retrains itself after every request","Text generation samples from a probability distribution, so it is non-deterministic","The context window is cleared between requests","Each request is routed to a different AWS Region"],a:[1],e:"Sampling introduces variation. Lowering temperature, top-p or top-k reduces it, but results are still not guaranteed to be identical, which matters when designing tests."},
+
+/* ---------- Domain 3: 18 ---------- */
+{d:3,q:"A company wants an internal chatbot that answers questions using its own policy documents, which are updated weekly. The answers must reflect the newest documents and cite sources, and the team does not want to retrain any model. What should it implement?",o:["Fine-tuning of a foundation model every week","Retrieval Augmented Generation (RAG) with a knowledge base","Continued pre-training on the documents","Training a new foundation model from scratch"],a:[1],e:"RAG retrieves the relevant document chunks at query time and adds them to the prompt, so answers always use the current documents and can cite them, with no retraining. Fine-tuning changes model behavior, not facts, and would need to be redone with every update."},
+{d:3,q:"Which AWS capability provides fully managed RAG, handling chunking, embeddings, the vector store and retrieval from documents in Amazon S3?",o:["Knowledge Bases for Amazon Bedrock","SageMaker Ground Truth","Amazon Comprehend","Amazon Personalize"],a:[0],e:"Bedrock Knowledge Bases implement RAG with the least operational effort, including source citations. Ground Truth labels training data; Comprehend analyzes text; Personalize recommends items."},
+{d:3,q:"A team's model outputs are almost right but the format is inconsistent. They have a small budget and no ML engineers. What should they try FIRST?",o:["Fine-tune the model on thousands of examples","Continued pre-training on domain data","Prompt engineering with few-shot examples and an explicit output format","Train a custom model in SageMaker"],a:[2],e:"Prompt engineering is free and immediate, and few-shot examples are the standard fix for inconsistent formatting. Move to RAG or fine-tuning only when prompting is not enough."},
+{d:3,q:"A company wants a model to consistently answer in its own brand voice and follow a specific response structure, and it has thousands of curated example prompt-and-answer pairs. Which approach fits best?",o:["Retrieval Augmented Generation","Fine-tuning the foundation model","Increasing the temperature","Adding a vector database"],a:[1],e:"Fine-tuning with labeled prompt/response pairs adapts the model's behavior, tone and format. RAG is for supplying facts, not for changing style, and temperature only changes randomness."},
+{d:3,q:"A legal firm wants a model to better understand legal terminology by training it further on a large collection of unlabeled legal documents. Which technique is this?",o:["Few-shot prompting","Continued pre-training","Reinforcement learning from human feedback","Batch inference"],a:[1],e:"Continued pre-training (domain adaptation) uses large volumes of unlabeled domain text. Fine-tuning would instead require labeled examples of desired responses."},
+{d:3,q:"What is few-shot prompting?",o:["Sending several prompts in parallel to reduce latency","Including a small number of examples in the prompt to show the model the pattern to follow","Training the model on a few thousand records","Limiting the response to a few tokens"],a:[1],e:"Few-shot (in-context) learning puts examples directly in the prompt. Zero-shot gives only the instruction, and one-shot gives a single example."},
+{d:3,q:"An application must let a foundation model take actions, such as calling internal APIs and AWS Lambda functions to place an order, and orchestrate several steps. Which Amazon Bedrock capability supports this?",o:["Agents for Amazon Bedrock","Guardrails for Amazon Bedrock","Bedrock model evaluation","Provisioned Throughput"],a:[0],e:"Bedrock Agents break a request into steps, call APIs or Lambda functions and query knowledge bases to complete a task, turning a model that answers into a system that acts."},
+{d:3,q:"A public-facing chatbot must never discuss competitors, must block toxic language and must mask customer phone numbers in responses. Which feature implements these rules?",o:["Amazon Macie","Guardrails for Amazon Bedrock","SageMaker Model Monitor","IAM policies on the model"],a:[1],e:"Bedrock Guardrails provide denied topics, content filters, word filters, PII detection with masking, and contextual grounding checks, applied to prompts and responses. IAM controls who may call the model, not what the model may say."},
+{d:3,q:"A company has fine-tuned a model in Amazon Bedrock and now wants to use it in production. What is required to run a custom model?",o:["Provisioned Throughput","An Amazon EC2 GPU instance","AWS Shield Advanced","A SageMaker Studio domain"],a:[0],e:"Custom (fine-tuned or continued-pre-trained) models in Bedrock run on Provisioned Throughput, where you purchase model units for guaranteed throughput, billed hourly with an optional term commitment."},
+{d:3,q:"A team must choose between two foundation models for a summarization feature and wants both automated scoring and human reviewers to rate the responses. Which capability should it use?",o:["Amazon Bedrock model evaluation","SageMaker Data Wrangler","Amazon Comprehend custom classification","AWS Trusted Advisor"],a:[0],e:"Bedrock model evaluation supports automatic evaluation with built-in metrics and datasets, and human evaluation with your own team or an AWS-managed work team scoring quality, style and relevance."},
+{d:3,q:"A data science team wants to deploy a well-known pre-trained open-source model into their own AWS account in a few clicks and optionally fine-tune it. Which capability should they use?",o:["SageMaker JumpStart","SageMaker Ground Truth","Amazon Kendra","Amazon Q Business"],a:[0],e:"JumpStart is the hub of pre-trained models, including foundation models, and solution templates that can be deployed or fine-tuned quickly inside your account."},
+{d:3,q:"Business analysts with no coding skills need to build predictive models from a spreadsheet of sales data. Which service is designed for them?",o:["Amazon SageMaker Canvas","Amazon SageMaker Studio notebooks","Amazon EMR","AWS Glue DataBrew"],a:[0],e:"Canvas is a no-code visual interface for building models and generating predictions. Studio notebooks require coding, EMR is big data processing, and DataBrew prepares data rather than building models."},
+{d:3,q:"A company needs to score 50 million records overnight with an ML model and does not need real-time responses. Which inference option is the most cost-effective?",o:["A real-time endpoint running 24/7","Batch transform","Asynchronous inference with a provisioned endpoint","Serverless inference"],a:[1],e:"Batch transform spins up resources, scores the whole dataset offline and shuts down, with no persistent endpoint to pay for. Real-time endpoints are for low-latency online requests."},
+{d:3,q:"An internal application receives only a few prediction requests per hour, at unpredictable times. Which SageMaker inference option minimizes idle cost?",o:["Serverless inference","A real-time endpoint on a large GPU instance","Batch transform on a schedule","Multi-model endpoints on always-on instances"],a:[0],e:"Serverless inference scales to zero between requests and charges only for the compute used while processing, which fits intermittent or unpredictable traffic."},
+{d:3,q:"Which TWO services would a company combine to read scanned invoices and then determine the sentiment of the free-text comments they contain? (Choose TWO.)",o:["Amazon Textract","Amazon Rekognition","Amazon Comprehend","Amazon Polly","Amazon Translate"],a:[0,2],e:"Textract extracts text, forms and tables from scanned documents, and Comprehend analyzes the extracted text for sentiment and entities. Rekognition is for image content, Polly is text to speech, and Translate converts languages."},
+{d:3,q:"Employees need an AI assistant that answers questions about internal wikis, SharePoint and Salesforce data, with citations and respecting each user's existing permissions, with minimal development. Which service should the company use?",o:["Amazon Q Business","Amazon Lex","Amazon Polly","Amazon SageMaker Canvas"],a:[0],e:"Amazon Q Business connects to enterprise data sources and provides a ready-made generative assistant with citations and permission awareness. Lex builds intent-based chatbots and would require designing the conversation and integrations yourself."},
+{d:3,q:"A developer wants inline code suggestions, unit test generation and help troubleshooting AWS services inside their IDE. Which service provides this?",o:["Amazon Q Developer","Amazon CodeGuru Profiler","Amazon Comprehend","AWS Cloud9"],a:[0],e:"Amazon Q Developer (formerly CodeWhisperer) provides code suggestions, chat, tests, documentation, security scanning and AWS help. CodeGuru Profiler analyzes application performance."},
+{d:3,q:"Which service detects bias in training data and models, and explains individual predictions using feature attributions?",o:["Amazon SageMaker Clarify","Amazon SageMaker Feature Store","Amazon Macie","AWS Config"],a:[0],e:"SageMaker Clarify measures bias before, during and after training and produces SHAP-based explanations of predictions. Macie finds sensitive data in S3; Config tracks resource configuration."},
+
+/* ---------- Domain 4: 9 ---------- */
+{d:4,q:"A hiring model was trained mostly on resumes from one demographic group and now scores other groups lower. What is the root cause?",o:["Overfitting to the test set","Bias in the training data","Model drift","An oversized context window"],a:[1],e:"Unrepresentative training data produces systematically unfair outcomes. Mitigations include more diverse and representative data, bias measurement with SageMaker Clarify, and continuous monitoring after deployment."},
+{d:4,q:"A bank must be able to justify to regulators why its model denied a specific loan application. Which responsible AI dimension does this address?",o:["Explainability","Elasticity","Durability","Scalability"],a:[0],e:"Explainability means being able to justify individual predictions, for example with feature attributions from SageMaker Clarify. Interpretability, a related idea, is how understandable the model's internal logic is."},
+{d:4,q:"What is an AWS AI Service Card?",o:["A billing statement for AI services","Documentation describing an AWS AI service's intended use cases, limitations and responsible AI design choices","A prepaid voucher for AWS Certification exams","An IAM policy template for machine learning roles"],a:[1],e:"AI Service Cards are AWS's transparency documentation for its own AI services. SageMaker Model Cards are the equivalent for models you build yourself."},
+{d:4,q:"A document-processing pipeline must send predictions below a confidence threshold to human reviewers before they are accepted. Which service provides this workflow?",o:["Amazon Augmented AI (A2I)","SageMaker Ground Truth","Amazon Textract Queries","SageMaker Pipelines"],a:[0],e:"A2I adds human review workflows to ML predictions after inference. Ground Truth is about labeling data before training."},
+{d:4,q:"Which TWO are dimensions of responsible AI as described by AWS? (Choose TWO.)",o:["Fairness","Transparency","Elasticity","Consolidated billing","Multi-AZ redundancy"],a:[0,1],e:"AWS lists fairness, explainability, privacy and security, safety, controllability, veracity and robustness, governance and transparency. The other options are general cloud or billing concepts."},
+{d:4,q:"A team must reduce the risk of biased outcomes before training begins. Which action is MOST effective?",o:["Increasing the model's temperature","Curating diverse, representative training data and checking for class imbalance","Adding more GPU instances to the training job","Reducing the number of epochs"],a:[1],e:"Bias usually originates in the data, so representative, well-documented data and imbalance checks are the strongest early control. Compute and inference settings do not address fairness."},
+{d:4,q:"Which statement describes a trade-off that teams face when choosing between a deep neural network and a decision tree for a regulated decision?",o:["Deep networks are always more accurate and equally interpretable","The deep network may be more accurate but is harder to interpret than the decision tree","Decision trees cannot be used for classification","Interpretability has no relevance to regulated decisions"],a:[1],e:"More complex models often perform better but act as black boxes. Regulated use cases favor interpretable models, or require explainability tooling such as Clarify on top of complex models."},
+{d:4,q:"What is the purpose of a SageMaker Model Card?",o:["To store the model's encryption keys","To document a model's intended use, training data, performance and risk rating for governance and audit","To automatically deploy a model to an endpoint","To label images for training"],a:[1],e:"Model Cards centralize documentation and approvals for a model, supporting governance, audits and responsible AI review."},
+{d:4,q:"Which TWO risks are specifically associated with generative AI systems? (Choose TWO.)",o:["Generating content that infringes intellectual property","Producing confident but factually incorrect answers","Physical failure of an Availability Zone","Exceeding an EC2 service quota","Unassociated Elastic IP charges"],a:[0,1],e:"Intellectual property exposure and hallucination are generative AI risks, along with toxicity, disclosure of sensitive data, deepfakes and over-reliance. The other options are ordinary cloud operations concerns."},
+
+/* ---------- Domain 5: 9 ---------- */
+{d:5,q:"A company must ensure that calls from its VPC to Amazon Bedrock never traverse the public internet. What should it configure?",o:["A NAT gateway in a public subnet","An internet gateway with a restrictive route table","A VPC interface endpoint (AWS PrivateLink) for Bedrock","An Elastic IP address for the Bedrock endpoint"],a:[2],e:"Interface endpoints powered by PrivateLink keep traffic to AWS services on the AWS network with private IPs. A NAT gateway or internet gateway would still send traffic over the internet."},
+{d:5,q:"An auditor asks which users invoked a foundation model, when, and from which IP address. Which service provides this record?",o:["Amazon CloudWatch","AWS CloudTrail","AWS Config","Amazon Macie"],a:[1],e:"CloudTrail logs API calls such as InvokeModel with the identity, timestamp and source IP. CloudWatch stores metrics and logs about performance; Config tracks resource configuration state."},
+{d:5,q:"A company must encrypt training data in Amazon S3 and model artifacts using keys whose policies and rotation it controls. Which service should it use?",o:["AWS Key Management Service (AWS KMS) customer managed keys","AWS Certificate Manager","AWS Secrets Manager","Amazon Inspector"],a:[0],e:"KMS customer managed keys let you control key policies, rotation and who can use the key, and they integrate with S3, SageMaker and Bedrock. ACM handles TLS certificates; Secrets Manager stores credentials."},
+{d:5,q:"Before using a large document set to train a model, a company must find out whether it contains personally identifiable information in Amazon S3. Which service should it use?",o:["Amazon Macie","Amazon GuardDuty","Amazon Rekognition","AWS Audit Manager"],a:[0],e:"Macie uses ML and pattern matching to discover and classify sensitive data such as PII in S3. GuardDuty detects threats from activity logs, and Audit Manager collects compliance evidence."},
+{d:5,q:"Under the AWS shared responsibility model, which task is the customer's responsibility when using Amazon Bedrock?",o:["Patching the infrastructure that hosts the foundation models","Managing the physical security of AWS data centers","Controlling which IAM identities can invoke models and what data is sent in prompts","Maintaining the underlying model-serving software"],a:[2],e:"AWS operates and secures the service infrastructure. The customer always owns their data, their prompts and outputs, IAM permissions, encryption choices and how the application uses the model."},
+{d:5,q:"An attacker embeds hidden instructions inside a document that a RAG chatbot later retrieves, causing the model to ignore its original instructions. What is this attack called, and what helps mitigate it?",o:["Data poisoning, mitigated by Multi-AZ deployment","Prompt injection, mitigated by guardrails, input and output validation and least-privilege tool access","Model inversion, mitigated by increasing temperature","Jailbreaking, mitigated by adding more GPUs"],a:[1],e:"Prompt injection hides instructions in user input or retrieved content. Defenses include Bedrock Guardrails, validating and filtering inputs and outputs, separating instructions from content, least privilege for anything the model can call, and human approval on sensitive actions."},
+{d:5,q:"A compliance team needs AWS's SOC 2 report to document that the AI platform runs on compliant infrastructure. Where can it obtain the report?",o:["AWS Artifact","AWS Audit Manager","AWS Trusted Advisor","Amazon Bedrock console"],a:[0],e:"Artifact provides AWS compliance reports and agreements on demand. Audit Manager assesses your own environment against frameworks."},
+{d:5,q:"A company wants central, fine-grained permissions on the datasets in its S3 data lake used to train models, including table- and column-level access. Which service should it use?",o:["AWS Lake Formation","Amazon Kinesis Data Streams","AWS Batch","Amazon QuickSight"],a:[0],e:"Lake Formation centralizes data lake permissions down to database, table, column and row level, enforced across Athena, Redshift Spectrum, EMR and Glue. The Glue Data Catalog holds the metadata it secures."},
+{d:5,q:"Which TWO practices support data governance for machine learning workloads? (Choose TWO.)",o:["Tracking data lineage from source through transformations to the trained model","Cataloging datasets and their schemas in the AWS Glue Data Catalog","Disabling CloudTrail to reduce log storage costs","Granting all data scientists full administrator access for speed","Storing training data only on developer laptops"],a:[0,1],e:"Governance relies on knowing where data came from, how it was transformed, which model used it, and who may access it. The other options remove auditability, violate least privilege and lose control of the data."}
+];
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const L="ABCDE";
+const SK="clf-exam-state-v1",HK="clf-exam-history-v1";
+const load=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const store=(k,v)=>{try{v===null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};
+const same=(x,y)=>x&&x.length===y.length&&x.every(v=>y.includes(v));
+try{const t=localStorage.getItem("clf-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}
+
+let st=null,tick=null,rFilter="wrong";
+
+function show(v){["start","run","result"].forEach(x=>$(x).hidden=x!==v);window.scrollTo(0,0);}
+
+/* ---------- start ---------- */
+function renderStart(){
+  $("dombar").innerHTML=Object.entries(DOM).map(([k,v])=>{const n=Q.filter(q=>q.d==k).length;return `<div class="dom" style="--dc:var(--d${k});--w:${v.w}"><span class="pct">${v.w}%</span><span class="dn">${v.n} (${n} questions)</span></div>`}).join("");
+  const saved=load(SK,null);
+  if(saved&&!saved.done){
+    const n=Object.keys(saved.ans).length;
+    let t=`Unfinished ${saved.mode==="exam"?"exam":"practice"} attempt: ${n} of ${saved.order.length} answered`;
+    if(saved.mode==="exam"){const left=saved.end-Date.now();t+=left>0?`, ${Math.ceil(left/60000)} minutes left.`:", time is up.";}else t+=".";
+    $("resumeText").textContent=t;$("resume").hidden=false;
+  }else $("resume").hidden=true;
+  if(saved&&saved.done){st=saved;const r=score();$("lastResText").textContent=`Your last ${saved.mode==="exam"?"exam":"practice"} attempt: ${r.right} of ${r.total} correct (${r.pct}%).`;$("lastRes").hidden=false;}else $("lastRes").hidden=true;
+  const h=load(HK,[]);
+  if(h.length){
+    $("hist").hidden=false;
+    $("histTable").innerHTML=`<table><thead><tr><th>Date</th><th>Mode</th><th>Score</th>${[1,2,3,4,5].map(d=>`<th>D${d}</th>`).join("")}</tr></thead><tbody>${h.slice(-10).reverse().map(r=>`<tr><td>${new Date(r.date).toLocaleDateString()}</td><td>${r.mode==="exam"?"Exam":"Practice"}</td><td><b>${r.pct}%</b> (${r.right}/${r.total})</td>${[1,2,3,4,5].map(d=>`<td>${r.dom[d]!=null?r.dom[d]+"%":"–"}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  }else $("hist").hidden=true;
+}
+
+function begin(mode,subset){
+  const idx=subset||Q.map((_,i)=>i);
+  const order=$("optShufQ").checked?shuffle(idx):idx.slice();
+  const perm={};order.forEach(i=>{const p=Q[i].o.map((_,j)=>j);perm[i]=$("optShufA").checked?shuffle(p):p;});
+  st={mode,order,perm,ans:{},flag:{},checked:{},pos:0,end:mode==="exam"?Date.now()+Math.round(90*60000*order.length/65):null,done:false};
+  store(SK,st);startRun();
+}
+function startRun(){show("run");$("map").open=false;renderQ();renderGrid();startTimer();$("finishBtn").textContent=st.mode==="exam"?"Finish exam":"Finish and see results";}
+
+/* ---------- run ---------- */
+function startTimer(){
+  clearInterval(tick);
+  if(st.mode!=="exam"){$("timer").textContent="";return;}
+  const upd=()=>{const left=st.end-Date.now();if(left<=0){$("timer").textContent="0:00";clearInterval(tick);finish(true);return;}
+    const m=Math.floor(left/60000),s=Math.floor(left%60000/1000);$("timer").textContent=`${m}:${String(s).padStart(2,"0")}`;$("timer").classList.toggle("low",left<600000);};
+  upd();tick=setInterval(upd,1000);
+}
+function renderQ(){
+  const qi=st.order[st.pos],q=Q[qi],multi=q.a.length>1,sel=st.ans[qi]||[],chk=st.mode==="practice"&&st.checked[qi];
+  $("count").textContent=`Question ${st.pos+1} of ${st.order.length}`;
+  $("pfill").style.width=(100*Object.keys(st.ans).length/st.order.length)+"%";
+  let h=`<div class="qmeta"><span class="dchip" style="--dc:var(--d${q.d})">Domain ${q.d}: ${DOM[q.d].n}</span><button class="tbtn flag" id="flagBtn" aria-pressed="${!!st.flag[qi]}">${st.flag[qi]?"Flagged":"Flag for review"}</button></div>`;
+  h+=`<p class="qtext">${esc(q.q.replace(/\s*\(Choose TWO\.\)/,""))}</p>${multi?`<p class="choose">Choose TWO.</p>`:""}<div class="olist" role="${multi?"group":"radiogroup"}">`;
+  st.perm[qi].forEach((oi,k)=>{
+    const on=sel.includes(oi);let cls="opt"+(multi?" multi":"")+(on?" sel":"");
+    if(chk){cls+=" locked";if(q.a.includes(oi))cls+=" right";else if(on)cls+=" wrong";}
+    h+=`<label class="${cls}"><input type="${multi?"checkbox":"radio"}" name="o" value="${oi}" ${on?"checked":""} ${chk?"disabled":""}><span class="ltr">${L[k]}</span><span>${esc(q.o[oi])}</span></label>`;
+  });
+  h+="</div>";
+  if(chk){const ok=same(sel,q.a);h+=`<div class="fb" style="--fbc:var(${ok?"--ok":"--bad"})"><b class="v">${ok?"Correct":"Not quite"}</b><p>${esc(q.e)}</p></div>`;}
+  const last=st.pos===st.order.length-1;
+  h+=`<div class="nav"><button class="tbtn" id="prevBtn" ${st.pos===0?"disabled":""}>Previous</button><span class="sp"></span>`;
+  if(st.mode==="practice"&&!chk)h+=`<button class="tbtn primary" id="checkBtn" ${sel.length?"":"disabled"}>Check answer</button>`;
+  h+=last?`<button class="tbtn ${st.mode==="exam"||chk?"primary":""}" id="endBtn">Finish</button>`:`<button class="tbtn ${st.mode==="exam"||chk?"primary":""}" id="nextBtn">Next</button>`;
+  h+="</div>";
+  $("qcard").innerHTML=h;
+  $("qcard").querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>choose(+inp.value)));
+  $("flagBtn").onclick=toggleFlag;
+  $("prevBtn").onclick=()=>go(st.pos-1);
+  if($("nextBtn"))$("nextBtn").onclick=()=>go(st.pos+1);
+  if($("endBtn"))$("endBtn").onclick=()=>finish(false);
+  if($("checkBtn"))$("checkBtn").onclick=check;
+}
+function choose(oi){
+  const qi=st.order[st.pos],q=Q[qi];
+  if(st.mode==="practice"&&st.checked[qi])return;
+  let s=st.ans[qi]||[];
+  if(q.a.length>1)s=s.includes(oi)?s.filter(x=>x!==oi):[...s,oi];else s=[oi];
+  if(s.length)st.ans[qi]=s;else delete st.ans[qi];
+  store(SK,st);renderQ();renderGrid();
+  const inp=$("qcard").querySelector(`input[value="${oi}"]`);if(inp)inp.focus({preventScroll:true});
+}
+function check(){const qi=st.order[st.pos];if(!st.ans[qi])return;st.checked[qi]=true;store(SK,st);renderQ();renderGrid();}
+function toggleFlag(){const qi=st.order[st.pos];st.flag[qi]?delete st.flag[qi]:st.flag[qi]=true;store(SK,st);renderQ();renderGrid();}
+function go(p){if(p<0||p>=st.order.length)return;st.pos=p;store(SK,st);renderQ();renderGrid();window.scrollTo({top:0});}
+function renderGrid(){
+  $("grid").innerHTML=st.order.map((qi,i)=>{
+    let c="";if(st.ans[qi])c="ans";
+    if(st.mode==="practice"&&st.checked[qi])c=same(st.ans[qi],Q[qi].a)?"ok":"no";
+    if(st.flag[qi])c+=" fl";if(i===st.pos)c+=" cur";
+    return `<button class="${c}" data-p="${i}" aria-label="Question ${i+1}">${i+1}</button>`;}).join("");
+  $("grid").querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.p));
+  const a=Object.keys(st.ans).length,f=Object.keys(st.flag).length;
+  $("legend").textContent=`${a} answered, ${st.order.length-a} unanswered, ${f} flagged`;
+}
+function finish(auto){
+  if(!auto){
+    const un=st.order.length-Object.keys(st.ans).length,f=Object.keys(st.flag).length;
+    let msg="Finish and see your results?";
+    if(un)msg=`${un} question${un>1?"s are":" is"} unanswered and will count as wrong.`+(f?` ${f} flagged.`:"")+" Finish anyway?";
+    else if(f)msg=`You still have ${f} flagged question${f>1?"s":""}. Finish anyway?`;
+    if(!confirm(msg))return;
+  }
+  clearInterval(tick);st.done=true;
+  const res=score();
+  const h=load(HK,[]);h.push({date:Date.now(),mode:st.mode,right:res.right,total:res.total,pct:res.pct,dom:res.domPct});store(HK,h.slice(-50));
+  store(SK,st);renderResult(res);
+}
+function score(){
+  let right=0;const dr={},dt={};
+  st.order.forEach(qi=>{const q=Q[qi];dt[q.d]=(dt[q.d]||0)+1;if(same(st.ans[qi],q.a)){right++;dr[q.d]=(dr[q.d]||0)+1;}});
+  const domPct={};Object.keys(dt).forEach(d=>domPct[d]=Math.round(100*(dr[d]||0)/dt[d]));
+  return {right,total:st.order.length,pct:Math.round(100*right/st.order.length),dr,dt,domPct};
+}
+
+/* ---------- results ---------- */
+function renderResult(res){
+  show("result");
+  $("copyBox").hidden=true;
+  $("rPct").textContent=res.pct+"%";
+  $("rRaw").textContent=`${res.right} of ${res.total} correct`;
+  const weak=Object.keys(res.domPct).sort((a,b)=>res.domPct[a]-res.domPct[b])[0];
+  let v;
+  if(res.pct>=80)v=`<b style="--vc:var(--ok)">Comfortably ready.</b> `;
+  else if(res.pct>=70)v=`<b style="--vc:var(--warn)">Borderline.</b> The real exam's 700/1000 scaled score roughly corresponds to 70% correct, but it isn't an exact conversion. Aim for 75–80% in practice to have a margin. `;
+  else v=`<b style="--vc:var(--bad)">Not there yet.</b> Review the explanations below and aim for 75–80% before booking. `;
+  if(res.total>=20&&weak)v+=`Your weakest area was Domain ${weak} (${DOM[weak].n}) at ${res.domPct[weak]}%.`;
+  $("rVerdict").innerHTML=v;
+  $("rDom").innerHTML=Object.keys(res.dt).sort().map(d=>`<div class="drow" style="--dc:var(--d${d})"><span>D${d} ${DOM[d].n} (${res.dr[d]||0}/${res.dt[d]})</span><div class="tr"><div style="width:${res.domPct[d]}%"></div></div><span class="pc">${res.domPct[d]}%</span></div>`).join("");
+  const wrong=st.order.filter(qi=>!same(st.ans[qi],Q[qi].a));
+  $("wrongBtn").hidden=!wrong.length;
+  $("wrongBtn").textContent=`Retake the ${wrong.length} I missed`;
+  rFilter=wrong.length?"wrong":"all";
+  syncFilter();renderReview();
+}
+function syncFilter(){$("rFilter").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.f===rFilter)));}
+function renderReview(){
+  const list=st.order.map((qi,i)=>({qi,i})).filter(({qi})=>{
+    if(rFilter==="wrong")return !same(st.ans[qi],Q[qi].a);
+    if(rFilter==="flag")return !!st.flag[qi];return true;});
+  $("rList").innerHTML=list.length?list.map(({qi,i})=>{
+    const q=Q[qi],sel=st.ans[qi]||[],ok=same(sel,q.a);
+    const lis=st.perm[qi].map((oi,k)=>{const c=q.a.includes(oi),y=sel.includes(oi);
+      return `<li class="${c?"c":y?"w":""}">${L[k]}. ${esc(q.o[oi])}${c?`<span class="tg">Correct</span>`:""}${y&&!c?`<span class="tg">Your answer</span>`:""}${y&&c?`<span class="tg">(yours)</span>`:""}</li>`}).join("");
+    return `<article class="rev" style="--rc:var(${ok?"--ok":"--bad"})"><h3><span>Question ${i+1}</span><span>Domain ${q.d}</span><span>${ok?"Correct":sel.length?"Wrong":"Unanswered"}</span>${st.flag[qi]?"<span>Flagged</span>":""}</h3><p class="qt">${esc(q.q)}</p><ul>${lis}</ul><p class="ex">${esc(q.e)}</p></article>`;
+  }).join(""):`<p class="hint">Nothing to show here.${rFilter==="wrong"?" You got everything right.":""}</p>`;
+}
+
+/* ---------- wiring ---------- */
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{const s=load(SK,null);if(s&&!s.done&&!confirm("This replaces your unfinished attempt. Continue?"))return;begin(b.dataset.mode);});
+$("resumeBtn").onclick=()=>{st=load(SK,null);if(!st)return;if(st.mode==="exam"&&st.end<=Date.now()){finish(true);return;}startRun();};
+$("discardBtn").onclick=()=>{store(SK,null);renderStart();};
+$("exitBtn").onclick=()=>{clearInterval(tick);store(SK,st);renderStart();show("start");};
+$("finishBtn").onclick=()=>finish(false);
+$("againBtn").onclick=()=>begin(st.mode);
+$("wrongBtn").onclick=()=>begin("practice",st.order.filter(qi=>!same(st.ans[qi],Q[qi].a)));
+$("lastResBtn").onclick=()=>{st=load(SK,null);if(st&&st.done)renderResult(score());};
+$("copyBtn").onclick=async()=>{
+  const wrong=st.order.map((qi,i)=>({qi,i})).filter(({qi})=>!same(st.ans[qi],Q[qi].a));
+  const r=score();
+  let t=`CLF-C02 practice exam: ${r.right}/${r.total} (${r.pct}%). By domain: `+Object.keys(r.domPct).sort().map(d=>`D${d} ${r.domPct[d]}%`).join(", ")+`\n\nQuestions I got wrong (${wrong.length}):\n`;
+  wrong.forEach(({qi},n)=>{const q=Q[qi],sel=st.ans[qi]||[];t+=`\n${n+1}. [Domain ${q.d}] ${q.q}\n   My answer: ${sel.length?sel.map(o=>q.o[o]).join(" + "):"(unanswered)"}\n   Correct: ${q.a.map(o=>q.o[o]).join(" + ")}\n`;});
+  $("copyTa").value=t;$("copyBox").hidden=false;
+  try{await navigator.clipboard.writeText(t);$("copyMsg").textContent="Copied. Paste it into the chat with Claude.";}
+  catch(e){$("copyTa").focus();$("copyTa").select();$("copyMsg").textContent="Your browser blocked automatic copying. The text is selected below: press Ctrl+C (Cmd+C on Mac), then paste it into the chat.";}
+};
+$("homeBtn").onclick=()=>{renderStart();show("start");};
+$("rFilter").querySelectorAll("button").forEach(b=>b.onclick=()=>{rFilter=b.dataset.f;syncFilter();renderReview();});
+document.addEventListener("keydown",e=>{
+  if($("run").hidden||e.metaKey||e.ctrlKey||e.altKey)return;
+  const k=e.key.toUpperCase(),qi=st.order[st.pos],q=Q[qi];
+  if(L.includes(k)&&k.length===1){const n=L.indexOf(k);if(n<q.o.length){e.preventDefault();choose(st.perm[qi][n]);}}
+  else if(k==="F"){toggleFlag();}
+  else if(e.key==="ArrowRight"){go(st.pos+1);}
+  else if(e.key==="ArrowLeft"){go(st.pos-1);}
+  else if(e.key==="Enter"&&st.mode==="practice"&&e.target.tagName!=="BUTTON"){e.preventDefault();if(!st.checked[qi])check();else go(st.pos+1);}
+});
+window.addEventListener("beforeunload",()=>{if(st&&!st.done)store(SK,st);});
+renderStart();
+</script>
+</body>
+</html>

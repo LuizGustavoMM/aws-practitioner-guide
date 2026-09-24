@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AWS AI Practitioner field guide (AIF-C01)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F5;--surface:#FFFFFF;--surface2:#F5F7FA;--ink:#172031;--muted:#5A667A;--line:#D8DEE7;--line-strong:#A9B4C4;
+  --accent:#1F5FAD;--accent-soft:#E2EBF7;--on-accent:#FFFFFF;--warn:#9A4A08;--warn-soft:#FBEADB;--ok:#1E7F55;
+  --d1:#6A4DB8;--d2:#B0364A;--d3:#1F5FAD;--d4:#27805F;--d5:#9A5B10;--d0:#5A667A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+    --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;--ok:#62C695;
+    --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;--d5:#EEBB7A;--d0:#98A5B8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+  --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;--ok:#62C695;
+  --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;--d5:#EEBB7A;--d0:#98A5B8;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 80px}
+
+/* Intro */
+.intro{display:grid;gap:18px;margin-bottom:22px}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.02;letter-spacing:-0.025em;margin:0;font-weight:700;max-width:18ch}
+.sub{color:var(--muted);max-width:64ch;margin:8px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:6px 26px;margin:0}
+.facts div{display:flex;gap:7px;align-items:baseline}
+.facts dt{color:var(--muted);font-size:14px}
+.facts dd{margin:0;font-weight:700}
+.dombar{display:flex;gap:6px}
+.dom{min-width:0;border:0;border-top:5px solid var(--dc);border-radius:4px 4px 12px 12px;padding:12px 14px 14px;text-align:left;cursor:pointer;
+  background:color-mix(in srgb,var(--dc) 11%,var(--surface));color:var(--ink)}
+.dom:hover{background:color-mix(in srgb,var(--dc) 18%,var(--surface))}
+.dom[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--dc)}
+.dom .pct{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:clamp(24px,3.2vw,38px);font-weight:700;color:var(--dc);line-height:1;display:block;letter-spacing:-0.02em}
+.dom .dn{font-size:14px;display:block;margin-top:6px;line-height:1.25}
+.dom .dk{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+.prog{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.prog .bar{flex:1 1 200px;height:8px;border-radius:99px;background:var(--line);overflow:hidden;max-width:420px}
+.prog .fill{height:100%;background:var(--ok);width:0;transition:width .3s}
+.prog p{margin:0;font-size:15px}
+.howto{margin:0;color:var(--muted);font-size:14.5px;max-width:80ch}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface)}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:236px minmax(0,1fr);gap:28px;align-items:start}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);max-height:calc(100vh - 24px - env(safe-area-inset-top,0px));overflow:auto;padding:4px 4px 12px 0}
+.side .grp{font-size:13px;color:var(--muted);margin:16px 10px 4px}
+.side .grp:first-child{margin-top:0}
+.side a{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:6px 10px;margin:1px 0;border-radius:0 8px 8px 0;color:var(--ink);text-decoration:none;font-size:14.5px;border-left:3px solid var(--dc);line-height:1.3}
+.side a:hover{background:var(--surface)}
+.side .cnt{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px;white-space:nowrap}
+.side .cnt.done{color:var(--ok);font-weight:700}
+
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:20px}
+.search{flex:1 1 240px}
+.search input{width:100%;font:inherit;padding:9px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);color:var(--ink)}
+.tbtn{font-size:14.5px;padding:8px 12px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--ink)}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.tbtn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* Sections */
+.sec{margin:0 0 38px}
+.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.sec h2{font-size:27px;margin:0;letter-spacing:-0.015em;line-height:1.15}
+.dchip{font-size:13px;color:var(--dc);border:1px solid color-mix(in srgb,var(--dc) 45%,transparent);padding:1px 9px;border-radius:99px;white-space:nowrap}
+.blurb{color:var(--muted);margin:2px 0 12px;max-width:78ch}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.svc{display:grid;grid-template-columns:26px 220px minmax(0,1fr);gap:4px 16px;padding:14px 16px;border-top:1px solid var(--line)}
+.list > .svc:first-child, .list > .svc.first{border-top:0}
+.svc h3{font-size:17px;margin:0;line-height:1.25;font-weight:700}
+.svc.known h3{color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:12px;padding:1px 7px;border-radius:6px;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.tag.trap{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.tag.serverless{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.d{margin:0;max-width:80ch}
+.tip{margin:8px 0 0;font-size:15px;padding-left:11px;border-left:3px solid var(--warn);max-width:80ch}
+.tip b{color:var(--warn)}
+.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);background:transparent;cursor:pointer;margin-top:1px;padding:0;display:grid;place-items:center}
+.chk svg{width:12px;height:12px;opacity:0}
+.chk[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.chk[aria-pressed="true"] svg{opacity:1}
+.chk:hover{border-color:var(--ok)}
+body.recall .svc{cursor:pointer}
+body.recall .svc:not(.show) .bd{filter:blur(7px);opacity:.55;user-select:none}
+body.recall .svc:not(.show) .bd::after{content:""}
+.recall-hint{display:none;font-size:13px;color:var(--muted)}
+body.recall .recall-hint{display:inline}
+
+/* Tables */
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+.wide table{min-width:760px}
+th,td{text-align:left;padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+thead th{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;background:var(--surface2);border-top:0;font-size:14.5px}
+tbody th{font-weight:700;white-space:nowrap}
+td.hl{color:var(--ok);font-weight:700}
+caption{caption-side:bottom;text-align:left;padding:8px 12px;color:var(--muted);font-size:13.5px}
+.trig td:last-child{font-weight:700;color:var(--accent)}
+.pair{display:grid;grid-template-columns:250px minmax(0,1fr);gap:4px 18px;padding:14px 16px;border-top:1px solid var(--line)}
+.pair h3{font-size:16.5px;margin:0;line-height:1.3}
+.pair p{margin:0;max-width:82ch}
+.empty{padding:40px 10px;color:var(--muted);text-align:center}
+
+/* Flashcards */
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);width:min(760px,94vw);padding:20px 22px;max-height:92vh}
+dialog::backdrop{background:rgb(8 12 20 / .6)}
+.fc-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.fc-head h2{margin:0;font-size:24px}
+.fc-opts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;margin-bottom:14px;font-size:14.5px}
+.fc-opts label{display:flex;flex-direction:column;gap:3px;color:var(--muted)}
+.fc-opts label.inline{flex-direction:row;align-items:center;gap:6px;color:var(--ink)}
+.fc-opts select{font:inherit;padding:7px 9px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface2);color:var(--ink);max-width:260px}
+.card{min-height:230px;border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--surface2);cursor:pointer}
+.card .front{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:24px;font-weight:700;line-height:1.25}
+.card .front.long{font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:18px;font-weight:400;line-height:1.5}
+.card .back{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line-strong);font-size:17px}
+.card .back .ans{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:22px;font-weight:700;color:var(--accent);display:block;margin-bottom:6px}
+.card .back .tip{font-size:15.5px}
+.fc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.fc-actions .tbtn{flex:1 1 140px}
+.fc-count{color:var(--muted);font-size:14px;margin:10px 0 0}
+.fc-know{background:var(--ok)!important;color:#fff!important;border-color:var(--ok)!important}
+
+@media (max-width:880px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static;max-height:none;display:flex;overflow-x:auto;gap:6px;padding:0 0 8px}
+  .side .grp{display:none}
+  .side a{white-space:nowrap;border-left:0;border-bottom:3px solid var(--dc);border-radius:8px 8px 0 0;background:var(--surface)}
+  .svc{grid-template-columns:24px minmax(0,1fr)}
+  .svc .bd{grid-column:2}
+  .pair{grid-template-columns:1fr}
+  .dombar{flex-wrap:wrap}
+  .dom{flex:1 1 40%!important}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{.toolbar,.side,.dombar,.prog,.howto{display:none}.layout{display:block}body.recall .svc .bd{filter:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <div>
+      <h1>AWS AI Practitioner field guide</h1>
+      <p class="sub">Every AI, ML and generative AI concept and AWS service with a real chance of showing up on AIF-C01, with the look-alikes that decide most questions.</p>
+    </div>
+    <dl class="facts">
+      <div><dt>Questions</dt><dd>65 (50 scored)</dd></div>
+      <div><dt>Time</dt><dd>90 minutes</dd></div>
+      <div><dt>Pass</dt><dd>700 / 1000</dd></div>
+      <div><dt>Cost</dt><dd>100 USD</dd></div>
+      <div><dt>Level</dt><dd>Foundational</dd></div>
+    </dl>
+    <div class="dombar" id="dombar" aria-label="Exam domains, click to filter"></div>
+    <div class="prog"><div class="bar"><div class="fill" id="progFill"></div></div><p id="progText"></p></div>
+    <p class="howto">Tick the circle when you could explain a service without looking; progress stays in this browser. Recall mode blurs the explanations so you can test yourself before revealing. Press <kbd>/</kbd> to search. Orange notes mark the exam angle; "Often confused" marks services the exam likes to pit against each other.</p>
+  </header>
+
+  <div class="layout">
+    <nav class="side" id="side" aria-label="Sections"></nav>
+    <main>
+      <div class="toolbar">
+        <div class="search"><input type="search" id="q" placeholder="Search services, keywords, numbers…" aria-label="Search"></div>
+        <button class="tbtn" id="recallBtn" aria-pressed="false">Recall mode</button>
+        <button class="tbtn" id="hideBtn" aria-pressed="false">Hide known</button>
+        <button class="tbtn primary" id="fcBtn">Flashcards</button>
+        <button class="tbtn" id="themeBtn" aria-label="Toggle dark mode">Theme</button>
+        <span class="recall-hint">Tap a row to reveal it.</span>
+      </div>
+      <div id="content"></div>
+      <p class="empty" id="empty" hidden>Nothing matches. Try a shorter word, clear "Hide known", or remove the domain filter.</p>
+    </main>
+  </div>
+</div>
+
+<dialog id="fc" aria-labelledby="fcTitle">
+  <div class="fc-head"><h2 id="fcTitle">Flashcards</h2><button class="tbtn" id="fcClose">Close</button></div>
+  <div class="fc-opts">
+    <label>Deck<select id="fcDeck"></select></label>
+    <label>Direction<select id="fcDir"><option value="n">Service → what it does</option><option value="m">What it does → service</option></select></label>
+    <label class="inline"><input type="checkbox" id="fcUnk" checked> Skip cards marked known</label>
+    <button class="tbtn primary" id="fcStart">Shuffle and start</button>
+  </div>
+  <div class="card" id="fcCard" tabindex="0" aria-live="polite"><div class="front" id="fcFront"></div><div class="back" id="fcBack" hidden></div></div>
+  <div class="fc-actions">
+    <button class="tbtn" id="fcAgain">Again <kbd>1</kbd></button>
+    <button class="tbtn" id="fcFlip">Flip <kbd>Space</kbd></button>
+    <button class="tbtn fc-know" id="fcKnow">I know it <kbd>2</kbd></button>
+  </div>
+  <p class="fc-count" id="fcCount"></p>
+</dialog>
+
+<script>
+const DOM={1:{n:"Fundamentals of AI and ML",w:20,k:"AI/ML/DL terms, learning types, ML lifecycle"},2:{n:"Fundamentals of Generative AI",w:24,k:"foundation models, tokens, embeddings, parameters"},3:{n:"Applications of Foundation Models",w:28,k:"prompting, RAG, fine-tuning, Bedrock, SageMaker, AI services"},4:{n:"Guidelines for Responsible AI",w:14,k:"bias, fairness, explainability, transparency"},5:{n:"Security, Compliance and Governance",w:14,k:"IAM, encryption, VPC, auditing, data governance"}};
+
+const S=[
+{id:"aiml",t:"AI and ML fundamentals",dom:1,b:"Vocabulary first. Most Domain 1 questions are 'which learning type / which term is this'.",items:[
+["AI, ML, deep learning, generative AI","Nested circles. AI is any system that performs tasks needing human-like intelligence. ML is the subset where algorithms learn patterns from data instead of being explicitly programmed. Deep learning is the subset of ML using multi-layer neural networks. Generative AI is a subset of deep learning that creates new content.","If a question asks which is broadest, the order is AI > ML > deep learning > generative AI.","trap"],
+["Machine learning","Algorithms find statistical patterns in historical data and produce a model that makes predictions on new data. You supply data and outcomes rather than rules.","Contrast with traditional software: rules are written by a developer. In ML, rules are learned from data.",""],
+["Deep learning and neural networks","Networks of layered nodes (neurons) that learn features automatically from raw data. They need large data volumes and GPUs, and power computer vision, speech and language models.","Advantage: no manual feature engineering for images, audio and text. Downside: expensive to train and hard to explain.",""],
+["Supervised learning","Training data is labeled: each example has the right answer. The model learns the mapping from inputs to labels. Two families: classification (predict a category, e.g. spam or not spam) and regression (predict a number, e.g. house price).","Keywords: labeled data, historical examples with known outcomes, fraud detection, churn prediction, image classification.","trap"],
+["Unsupervised learning","Training data has no labels. The model finds structure by itself: clustering (customer segments), anomaly detection, dimensionality reduction, association rules.","Keywords: no labels, discover patterns, group similar items, find outliers.","trap"],
+["Reinforcement learning","An agent acts in an environment, gets rewards or penalties, and learns a policy that maximizes cumulative reward through trial and error.","Keywords: agent, environment, reward, trial and error, robotics, game playing, AWS DeepRacer. RLHF applies the same idea with human feedback to align language models.","trap"],
+["Self-supervised learning","The model generates its own labels from unlabeled data, for example predicting the next word in a sentence. This is how foundation models are pre-trained on internet-scale text.","Explains why foundation models do not need labeled data for pre-training.",""],
+["Labeled vs unlabeled data","Labeled data has a target value attached (this image is a cat). Unlabeled data does not. Labeling is often the most expensive part of an ML project, which is why Ground Truth and A2I exist.","",""],
+["Features, labels and structured vs unstructured data","Features are the input columns or signals. The label is the target. Structured data is tabular (databases, CSV); semi-structured is JSON or logs; unstructured is text, images, audio and video.","Deep learning is the usual answer for unstructured data; classical ML works well on tabular data.",""],
+["Training, validation and test data","The dataset is split. Training data fits the model, validation data tunes hyperparameters and compares variants, and test (holdout) data gives an unbiased measure of how the model performs on unseen data.","Evaluating on the training data is the classic mistake: it hides overfitting.","trap"],
+["Overfitting and underfitting","Overfitting: the model memorizes the training data (high accuracy in training, poor accuracy on new data). Causes include too little data, too many epochs, and excessive complexity. Underfitting: the model is too simple and performs badly everywhere.","Fix overfitting with more or more diverse data, early stopping, regularization, or a simpler model. Fix underfitting with more features, a more complex model or more training.","trap"],
+["Bias and variance","Bias is error from over-simplified assumptions (underfitting). Variance is sensitivity to fluctuations in the training data (overfitting). Good models balance both.","Do not confuse this statistical bias with social/fairness bias, which is Domain 4.","trap"],
+["Parameters vs hyperparameters","Parameters (weights) are learned by the model during training. Hyperparameters are set by you before training: learning rate, batch size, number of epochs, number of layers, temperature for inference.","Hyperparameter tuning searches for the best combination; SageMaker Automatic Model Tuning does this.","trap"],
+["Epoch, batch size, learning rate","An epoch is one full pass over the training data. Batch size is how many samples are processed before weights update. Learning rate controls how big each weight update is.","Learning rate too high means the model does not converge; too low means very slow training.",""],
+["Feature engineering","Creating, selecting and transforming input variables to improve model quality: normalization, one-hot encoding, extracting date parts, combining columns.","SageMaker Data Wrangler prepares and transforms data; SageMaker Feature Store stores and shares curated features.",""],
+["Inference","Using a trained model to make predictions on new data. Real-time inference answers a single request in milliseconds, batch inference scores a large dataset offline, and asynchronous inference handles large payloads or long processing times.","Training is expensive and occasional; inference is cheaper per call but runs constantly, so it often dominates total cost.","trap"],
+["Common AI use cases","Computer vision (defect detection, medical imaging), natural language processing (sentiment, translation, summarization), speech (transcription, voice assistants), recommendation, forecasting (demand, inventory), anomaly and fraud detection, predictive maintenance, document processing, content generation.","Exam questions map a business scenario to one of these categories, then to the AWS service that does it.",""],
+["When NOT to use AI or ML","When rules are deterministic and known (tax calculation), when there is no quality data, when 100% predictable and auditable results are required, when a simple rules engine or statistics is enough, or when the cost outweighs the benefit.","ML is probabilistic: it returns likely answers, not guaranteed ones.","trap"],
+["MLOps","Applying DevOps practices to ML: version data, code and models; automate training and deployment pipelines; monitor models in production; retrain when performance drops; keep everything reproducible and auditable.","SageMaker Pipelines, Model Registry, Model Monitor and Experiments are the MLOps toolkit.",""],
+["Model drift and data drift","Real-world data changes over time, so a deployed model degrades. Data drift is a change in the input distribution; concept drift is a change in the relationship between input and target.","Detect with SageMaker Model Monitor, then retrain with fresh data. Keyword: accuracy is dropping months after deployment.","trap"]
+]},
+{id:"lifecycle",t:"The ML lifecycle and how to choose an approach",dom:1,b:"AWS wants you to know the stages and which service belongs to each, plus how to pick between ready-made AI, a foundation model, and a custom model.",items:[
+["ML lifecycle stages","1) Frame the business problem and define success metrics. 2) Collect data. 3) Explore and prepare data (EDA, cleaning, labeling). 4) Feature engineering. 5) Train the model. 6) Evaluate and tune. 7) Deploy. 8) Monitor and retrain.","Questions often ask which stage an activity belongs to, or which SageMaker feature supports it.",""],
+["SageMaker mapped to the lifecycle","Prepare: Data Wrangler, Ground Truth, Feature Store. Build and train: Studio, notebooks, training jobs, Autopilot, JumpStart. Evaluate: Experiments, Clarify, Automatic Model Tuning. Deploy: endpoints, batch transform, serverless and asynchronous inference. Operate: Model Monitor, Model Registry, Pipelines, Model Cards.","",""],
+["Choosing between AWS AI options","Ladder from least to most effort. 1) Managed AI service (Rekognition, Comprehend, Textract): a trained model behind an API, no ML skills. 2) Amazon Bedrock: foundation models via API, with prompt engineering, RAG or fine-tuning. 3) SageMaker AI: build and train your own model when you need full control. 4) Train a model from scratch on EC2: highest cost and effort.","The exam almost always prefers the highest rung that satisfies the requirement, because it means less operational overhead.","trap"],
+["Cost drivers in AI workloads","Training time and instance type, inference volume (tokens or requests), data storage and transfer, labeling effort, and provisioned capacity that sits idle.","Reduce cost with managed spot training, smaller or distilled models, batch instead of real-time inference, serverless inference for intermittent traffic, caching, and shorter prompts.",""],
+["AWS Trainium and AWS Inferentia","Purpose-built AWS chips. Trainium (Trn instances) accelerates model training; Inferentia (Inf instances) accelerates inference, both at lower cost than general-purpose GPUs. P and G instances are NVIDIA GPU families used for training and graphics/inference.","Keyword: cost-effective custom silicon. Train with Trainium, infer with Inferentia.","trap"]
+]},
+{id:"genai",t:"Generative AI fundamentals",dom:2,b:"The heart of Domain 2: what a foundation model is and the vocabulary around it.",items:[
+["Foundation model (FM)","A very large model pre-trained on massive, diverse, mostly unlabeled data that can be adapted to many downstream tasks. It is general-purpose rather than task-specific, and adapting it is far cheaper than training from scratch.","FM lifecycle: data selection, pre-training, optimization (prompting, RAG, fine-tuning), evaluation, deployment, monitoring.",""],
+["Large language model (LLM)","A foundation model specialized in text. It predicts the next token given the preceding ones, which produces fluent text, summaries, answers, translations and code.","Model size is measured in parameters (billions). Bigger usually means more capable, slower and more expensive.",""],
+["Transformer architecture and self-attention","The neural architecture behind modern LLMs. Self-attention lets the model weigh the relationship between all tokens in a sequence at once, so it captures context and long-range dependencies, and it trains in parallel.","You only need the idea, not the math: attention = understanding how words relate in context.",""],
+["Tokens and tokenization","Models do not read characters or words, they read tokens (word pieces). In English a token averages about four characters, so roughly 0.75 words. Bedrock charges per input and output token.","Longer prompts cost more and add latency. Cutting prompt size is a cost optimization.","trap"],
+["Context window","The maximum number of tokens the model can consider at once, covering the prompt plus the generated answer. Models differ widely in size of the context window.","If a use case needs whole long documents, context window size becomes a model-selection criterion.",""],
+["Embeddings","Numeric vector representations of text, images or audio that place semantically similar items close together in vector space. They power semantic search, clustering, recommendation and RAG retrieval.","Amazon Titan Text Embeddings and Cohere Embed are available in Bedrock. Keyword: similarity, semantic meaning, vector.","trap"],
+["Vector database","A store that indexes embeddings and retrieves the nearest ones to a query vector. On AWS: Amazon OpenSearch Service (including Serverless), Aurora PostgreSQL and RDS PostgreSQL with pgvector, Amazon Neptune Analytics, Amazon DocumentDB, Amazon MemoryDB, plus partners like Pinecone and Redis Enterprise Cloud.","Bedrock Knowledge Bases can create and manage an OpenSearch Serverless vector store for you.","trap"],
+["Multimodal models","Models that accept or produce more than one type of data, such as text plus images. Amazon Nova and Anthropic Claude accept images and text; Stable Diffusion and Amazon Titan Image Generator create images from text prompts.","Diffusion models are the usual architecture for image generation.",""],
+["Inference parameters","Settings that control generation at request time. Temperature: higher values make output more random and creative, lower values make it more focused and deterministic. Top-p (nucleus sampling) and top-k limit which candidate tokens can be chosen. Max tokens caps the answer length. Stop sequences end generation.","'More creative' means raise temperature. 'More consistent, factual, repeatable' means lower temperature. These are inference parameters, not training hyperparameters.","trap"],
+["Hallucination","The model produces content that sounds plausible but is factually wrong or invented. It comes from the model predicting likely text, not from looking anything up.","Mitigate with RAG (grounding in your data), lower temperature, prompts that allow saying 'I do not know', Bedrock Guardrails contextual grounding checks, and human review.","trap"],
+["Non-determinism","The same prompt can produce different outputs, because generation samples from a probability distribution. Lowering temperature reduces variation but does not guarantee identical results.","This is a limitation to state in questions about testing and reproducibility.",""],
+["Prompt, completion and system prompt","The prompt is the input you send. The completion (or inference) is the generated output. A system prompt sets persistent instructions, role and tone for the conversation.","",""],
+["Generative AI capabilities","Text generation, summarization, question answering, chatbots and virtual assistants, translation, code generation and explanation, image and video generation, semantic search, data augmentation, personalization, agents that execute tasks.","",""],
+["Generative AI limitations and risks","Hallucination, non-determinism, knowledge cutoff (no awareness of recent events), no built-in access to private data, limited explainability, bias in training data, toxicity, intellectual property concerns, token cost and latency.","",""],
+["Choosing a foundation model","Compare modality (text, image, multimodal), task performance on your benchmark, cost per token, latency and throughput, context window, model size, customization options (fine-tuning support), language coverage and license terms.","There is no single best model. The exam expects a trade-off answer based on the requirement stated.",""],
+["Advantages of generative AI on AWS","Choice of models through one API, pay as you go with no infrastructure to manage, data stays in your account and Region and is not used to train base models, built-in security and compliance, easy integration with other AWS services, and speed to market.","",""],
+["Amazon PartyRock","A playground built on Bedrock where anyone can build small generative AI apps with no code and no AWS account required.","Keyword: experiment, learn, no code, no infrastructure.",""]
+]},
+{id:"prompt",t:"Prompt engineering",dom:3,b:"The cheapest way to improve output quality, and the first thing the exam expects you to try.",items:[
+["Prompt engineering","Designing the input text so the model produces the wanted output: clear instructions, relevant context, examples, and a defined output format. It changes results without touching the model, so it costs almost nothing.","Always the first option on a cost or effort question, before RAG and long before fine-tuning.","trap"],
+["Elements of a good prompt","Instruction (what to do), context (background or retrieved data), input data (the actual content), and output indicator (format, length, tone). Negative prompting states what to avoid.","",""],
+["Zero-shot, one-shot and few-shot prompting","Zero-shot: only the instruction, no examples. One-shot: a single example. Few-shot: several examples in the prompt that show the pattern (in-context learning).","Few-shot is the standard answer when output format or style is inconsistent and you do not want to fine-tune.","trap"],
+["Chain-of-thought prompting","Asking the model to reason step by step before answering. It improves multi-step reasoning, math and logic tasks, at the cost of longer, slower and more expensive responses.","Keyword: complex reasoning, show the steps.",""],
+["Prompt templates","Reusable prompts with placeholders filled at runtime. They keep output consistent across an application and make prompts easier to version and test.","",""],
+["Prompt injection, jailbreaking and prompt leaking","Injection: malicious instructions hidden in user input or retrieved documents make the model ignore its original instructions. Jailbreaking: crafted prompts bypass safety restrictions. Prompt leaking: getting the model to reveal its system prompt or confidential context.","Mitigate with Bedrock Guardrails, input and output validation and filtering, least privilege for anything the model can call, clear separation of instructions from user content, and human review of sensitive actions.","trap"],
+["Poisoning and adversarial inputs","Poisoning corrupts training or retrieval data so the model learns or repeats something harmful. Adversarial inputs are crafted to force a wrong answer.","Defenses: curated and validated data sources, access control on training data, monitoring.",""]
+]},
+{id:"customize",t:"Customizing foundation models: RAG, fine-tuning, agents",dom:3,b:"The single most tested decision in Domain 3: how to make a general model work with your private or specialized data.",items:[
+["Retrieval Augmented Generation (RAG)","Your documents are chunked, converted to embeddings and stored in a vector database. At query time the most relevant chunks are retrieved and inserted into the prompt as context, so the model answers from your data. The model itself is never retrained.","Choose RAG for: private or proprietary knowledge, frequently changing data, source citation, lower cost than fine-tuning, reducing hallucination. Keyword: internal documents, up-to-date answers, no retraining.","trap"],
+["Knowledge Bases for Amazon Bedrock","Managed RAG. Point it at documents in S3, it handles chunking, embeddings, the vector store (for example OpenSearch Serverless) and retrieval, and it returns answers with source citations.","'Implement RAG with the least operational effort' means Bedrock Knowledge Bases.",""],
+["Fine-tuning","Continue training a foundation model on your own labeled examples (prompt/response pairs) so it adapts its behavior, tone, format or domain vocabulary. It changes the model's weights and produces a private custom model.","Choose it for consistent specialized style or task behavior, not for teaching new facts that change often. It needs labeled data, time and money, and in Bedrock a custom model requires Provisioned Throughput to be used.","trap"],
+["Continued pre-training (domain adaptation)","Further pre-training on large amounts of your own unlabeled domain text (legal, medical, internal jargon) so the model learns the domain's language.","Difference from fine-tuning: unlabeled data and domain knowledge, rather than labeled examples of desired behavior.","trap"],
+["Instruction tuning and RLHF","Instruction tuning trains a model to follow instructions using instruction/response pairs. Reinforcement learning from human feedback uses human preference rankings to align the model with human expectations of helpfulness and safety.","",""],
+["Transfer learning","Reusing a model trained on one task as the starting point for another, instead of training from scratch. Fine-tuning a foundation model is an application of transfer learning.","",""],
+["The customization ladder","Prompt engineering (cheapest, instant) → RAG (your data, no retraining) → fine-tuning or continued pre-training (changes the model, needs data and budget) → train a foundation model from scratch (only for organizations with enormous data, budget and expertise).","When a question mentions budget, time or limited ML expertise, move down the list, not up.","trap"],
+["Agents for Amazon Bedrock","An agent breaks a user request into steps, calls APIs or AWS Lambda functions, queries knowledge bases, and returns a final result. It turns a model that answers into a system that acts.","Keyword: take actions, call company APIs, complete a multi-step task such as booking or placing an order.",""],
+["Model evaluation in Bedrock","Compare models with automatic evaluation (built-in metrics and curated or your own datasets) or human evaluation (your team or an AWS-managed work team scoring responses on relevance, style, brand voice).","Keyword: choose between models, measure quality before production.",""]
+]},
+{id:"bedrock",t:"Amazon Bedrock",dom:3,b:"The centerpiece service of this exam. Know its components by name.",items:[
+["Amazon Bedrock","Fully managed, serverless service that gives access to foundation models from Amazon and third parties through one API. No infrastructure to provision. Includes playgrounds, customization, RAG, agents, guardrails and evaluation.","Keyword: build generative AI applications without managing infrastructure, choice of models.","serverless"],
+["Models available in Bedrock","Amazon (Nova, Titan text, embeddings and image), Anthropic (Claude), Meta (Llama), Mistral AI, Cohere, AI21 Labs, Stability AI and others, covering text, chat, embeddings and image generation.","You must request model access before invoking a model.",""],
+["Bedrock pricing models","On-demand: pay per input and output token (or per image), no commitment. Batch: process large sets of prompts at a discount. Provisioned Throughput: reserve model units for guaranteed throughput, billed hourly with optional 1 or 6 month commitment, and required to run a custom (fine-tuned) model.","Steady heavy production traffic or a custom model means Provisioned Throughput. Occasional or unpredictable use means on-demand.","trap"],
+["Guardrails for Amazon Bedrock","Configurable safety controls applied to prompts and responses: content filters (hate, insults, sexual, violence, misconduct), denied topics, word filters, PII detection with masking or blocking, and contextual grounding checks that catch hallucinated or irrelevant answers. Guardrails can be applied to any FM, including models outside Bedrock and to agents.","The single answer for 'block harmful content', 'stop the chatbot discussing competitors or giving financial advice', 'redact personal data'.","trap"],
+["Bedrock Knowledge Bases, Agents, Flows and Studio","Knowledge Bases provide managed RAG; Agents execute multi-step tasks; Prompt Flows chain prompts and services into a workflow visually; playgrounds and Bedrock Studio give a UI for experimenting.","",""],
+["Bedrock data protection","Your prompts, completions and customization data are not used to train the base models and are not shared with model providers. Data stays in your Region, is encrypted with KMS, and can be accessed privately with VPC interface endpoints (PrivateLink). Access is controlled with IAM and logged in CloudTrail; model invocation logging can send prompts and responses to S3 or CloudWatch Logs.","",""],
+["Amazon Q Business","Generative AI assistant for the workplace. It connects to company data sources (S3, SharePoint, Salesforce, Confluence, Jira and more), answers questions with citations, summarizes, and respects each user's existing permissions.","Keyword: employees ask questions about internal company data, ready-made assistant rather than a custom app.","trap"],
+["Amazon Q Developer","Generative AI assistant for software development: inline code suggestions, chat, unit tests, documentation, security scanning, code transformation and upgrades, plus help with AWS services, cost and troubleshooting in the console.","Keyword: developers, write and modernize code.",""],
+["Amazon Q in QuickSight and other integrations","Amazon Q also appears inside other services, such as natural-language dashboard building and data questions in QuickSight and summarization in Connect.","",""]
+]},
+{id:"sagemaker",t:"Amazon SageMaker AI",dom:3,extra:"t1",b:"When a question involves building, training or operating your own models, the answer is a SageMaker feature. Learn the feature names.",items:[
+["Amazon SageMaker AI","End-to-end managed platform to prepare data, build, train, tune, deploy and monitor machine learning models, with managed infrastructure for notebooks, training jobs and endpoints.","Contrast with Bedrock: Bedrock consumes foundation models through an API; SageMaker builds and operates models.","trap"],
+["SageMaker Studio and notebooks","Web-based IDE for the whole ML workflow, with managed Jupyter notebooks.","",""],
+["SageMaker JumpStart","Hub of pre-trained, ready-to-deploy models (including foundation models) and end-to-end solution templates that can be deployed or fine-tuned in a few clicks.","Keyword: start from a pre-trained model quickly, deploy an open-source model in my own account.","trap"],
+["SageMaker Canvas","Visual, no-code interface that lets business analysts build ML models and generate predictions (including forecasting and generative AI tasks) without writing code.","Keyword: no-code, business analysts, no ML expertise.","trap"],
+["SageMaker Autopilot (AutoML)","Automatically explores algorithms, preprocessing and hyperparameters to build the best model for a tabular dataset, and shows how each candidate was produced.","Keyword: automatically build and tune a model with minimal ML expertise, but with code and full visibility.","trap"],
+["SageMaker Ground Truth","Data labeling service using your own workforce, a vendor workforce or Amazon Mechanical Turk, with automated labeling to cut cost. Ground Truth Plus is the fully managed version where AWS runs the labeling for you.","Keyword: create labeled training data.","trap"],
+["SageMaker Data Wrangler","Visual data preparation: import, explore, clean and transform data, and engineer features with hundreds of built-in transformations.","",""],
+["SageMaker Feature Store","Central repository to store, share, discover and reuse curated features for training and inference, keeping both consistent.","",""],
+["SageMaker Clarify","Detects bias in data and in trained models (before, during and after training) and explains predictions using feature attributions (SHAP values). It also supports evaluating foundation models for accuracy, robustness and toxicity.","The answer for 'detect bias' and for 'explain why the model made this prediction'.","trap"],
+["SageMaker Model Monitor","Continuously monitors deployed models for data quality issues, drift, bias drift and feature attribution drift, and raises alerts through CloudWatch.","Keyword: accuracy degrading in production, detect drift.","trap"],
+["SageMaker Model Cards and Model Dashboard","Model Cards document a model's intended use, training data, performance, risk rating and approvals in one place. The Model Dashboard gives a central view of deployed models, their monitors and compliance status.","Model Cards are about your own models; AI Service Cards are AWS's documentation of its AI services.","trap"],
+["SageMaker Pipelines, Model Registry and Experiments","Pipelines automate repeatable ML workflows (CI/CD for ML). Model Registry versions and approves models for deployment. Experiments tracks runs, parameters and metrics for comparison.","The MLOps trio.",""],
+["SageMaker training features","Managed training jobs on chosen instance types, distributed training, automatic model tuning (hyperparameter optimization), managed spot training (up to 90% savings), Debugger and Profiler for training problems.","",""],
+["SageMaker inference options","Real-time endpoints (low-latency, always on), serverless inference (intermittent traffic, scales to zero), asynchronous inference (large payloads or long processing, queued), and batch transform (score a whole dataset offline, no persistent endpoint).","Match the traffic pattern: constant to real time, sporadic to serverless, big offline job to batch transform.","trap"],
+["SageMaker Role Manager and governance","Role Manager builds least-privilege IAM roles for ML personas in a few steps; combined with Model Cards and the Model Dashboard it forms SageMaker's governance toolset.","",""]
+]},
+{id:"aiservices",t:"Pre-trained AI services",dom:3,b:"Each service maps to one task. The exam mostly tests that mapping, as in the table above.",items:[
+["Amazon Rekognition","Image and video analysis: objects and scenes, faces and face comparison, celebrities, text in images, unsafe content moderation, and person tracking in video. Custom Labels trains it on your own objects.","Keyword: images or video. Not for text documents, which is Textract.","trap"],
+["Amazon Textract","Extracts printed text, handwriting, forms as key-value pairs and tables from scanned documents and PDFs, with specialized support for invoices, receipts and identity documents.","Keyword: document, form, invoice, scanned PDF. Beyond plain OCR because it understands structure.","trap"],
+["Amazon Comprehend","Natural language processing over text: sentiment, entities, key phrases, language detection, PII detection, topic modeling and custom classification. Comprehend Medical extracts clinical information.","Keyword: sentiment, extract meaning from text. Often paired with Textract (extract text, then analyze it).","trap"],
+["Amazon Transcribe","Automatic speech recognition: audio to text, with speaker identification, custom vocabulary, automatic language identification, PII redaction and subtitles. Call Analytics adds contact-center insights.","Speech to text.","trap"],
+["Amazon Polly","Text to speech with lifelike neural voices, lexicons and SSML control.","Text to speech. The mirror image of Transcribe.","trap"],
+["Amazon Translate","Neural machine translation between languages, in real time or batch, with custom terminology.","",""],
+["Amazon Lex","Builds conversational chatbots and voice bots using intents, slots and fulfillment through Lambda. Same technology as Alexa, and integrates with Amazon Connect.","Keyword: chatbot with defined intents. For a generative assistant over company documents, the answer is Amazon Q Business or a Bedrock application.","trap"],
+["Amazon Kendra","Intelligent enterprise search powered by ML. Users ask natural-language questions and it returns specific answers from connected repositories, respecting access control.","Keyword: enterprise search across document repositories.",""],
+["Amazon Personalize","Real-time personalized recommendations and re-ranking built from your user, item and interaction data, using the same technology as Amazon.com.","Keyword: product or content recommendations.","trap"],
+["Amazon Forecast","Time-series forecasting with ML for demand, inventory and financial planning. Closed to new customers, with SageMaker Canvas as the replacement, but still appears in questions.","","legacy"],
+["Amazon Fraud Detector","Detects potentially fraudulent online activity such as fake accounts and payment fraud, using your historical fraud data plus Amazon's expertise.","",""],
+["Amazon Augmented AI (A2I)","Adds human review workflows to ML predictions, for example routing low-confidence Textract or Rekognition results, or generative AI outputs, to human reviewers.","Keyword: human in the loop, human review of low-confidence predictions.","trap"],
+["Amazon Bedrock Data Automation","Extracts insights from unstructured multimodal content (documents, images, audio, video) into structured output for applications and RAG pipelines.","",""],
+["AWS HealthScribe, Comprehend Medical, Transcribe Medical","Healthcare-specific AI: generate clinical notes from patient conversations, and extract or transcribe medical information.","",""],
+["Amazon Monitron and Amazon Lookout services","Industrial ML for equipment monitoring and anomaly detection in equipment, metrics and vision. Several Lookout services are being retired but can appear as distractors.","","legacy"],
+["AWS DeepRacer and PartyRock","Learning tools: DeepRacer teaches reinforcement learning with a simulated (or physical) race car; PartyRock is a no-code Bedrock playground.","",""]
+]},
+{id:"metrics",t:"Evaluating models",dom:1,extra:"t2",b:"Know what each metric measures and, above all, when precision matters more than recall.",items:[
+["Confusion matrix","Table of true positives, false positives, true negatives and false negatives for a classification model. Every classification metric is derived from it.","",""],
+["Accuracy","Share of all predictions that were correct. Misleading when classes are imbalanced: a model that always says 'not fraud' can be 99.9% accurate and useless.","Keyword trap: imbalanced dataset means accuracy is the wrong metric.","trap"],
+["Precision and recall","Precision: of the items the model flagged as positive, how many really were (minimizes false positives). Recall (sensitivity): of all real positives, how many the model caught (minimizes false negatives).","Cost of a false negative high (cancer screening, fraud) means optimize recall. Cost of a false positive high (blocking legitimate transactions, spam filters that lose real mail) means optimize precision.","trap"],
+["F1 score","Harmonic mean of precision and recall, used when you need one number balancing both, especially with imbalanced classes.","",""],
+["AUC-ROC","Measures how well a classifier separates classes across all thresholds. 1.0 is perfect, 0.5 is random guessing.","",""],
+["Regression metrics","MSE and RMSE penalize large errors most; MAE is the average absolute error and is easier to interpret; R squared shows how much variance the model explains.","Regression means predicting a number, so accuracy and precision do not apply.","trap"],
+["Generative AI metrics","BLEU scores translation quality by comparing with reference translations. ROUGE scores summarization by overlap with reference summaries. BERTScore compares semantic similarity using embeddings. Perplexity measures how well the model predicts text (lower is better).","BLEU for translation, ROUGE for summaries is the classic pairing.","trap"],
+["Human evaluation and benchmarks","Human review scores relevance, tone, helpfulness and safety, which automatic metrics miss. Public benchmark datasets (such as GLUE, SuperGLUE, MMLU, BIG-bench, HELM) compare general model capability.","Bedrock supports both automatic and human model evaluation.",""],
+["Business metrics","What the organization actually cares about: user satisfaction, conversion rate, average revenue per user, cross-domain adoption, efficiency and time saved, cost per inference or per task, and return on investment.","Foundational exams love the answer that connects model quality to business outcomes.",""]
+]},
+{id:"responsible",t:"Responsible AI",dom:4,b:"Domain 4 is only 14% but its questions are easy points once you know the vocabulary and which service enforces what.",items:[
+["Dimensions of responsible AI","AWS lists: fairness, explainability, privacy and security, safety, controllability, veracity and robustness, governance, and transparency.","Learn them as a list; questions ask which dimension a scenario belongs to.","trap"],
+["Bias in AI","Systematic unfair outcomes for certain groups. Sources: unrepresentative or historical training data, sampling bias, labeling by biased humans, proxies for protected attributes, feedback loops, and algorithmic choices.","Reduce with diverse and representative data, data augmentation, bias metrics before and after training, and continuous monitoring. Measured with SageMaker Clarify.","trap"],
+["Fairness metrics and class imbalance","Measures such as difference in positive proportions between groups, disparate impact and accuracy differences per group show whether outcomes differ across populations. Class imbalance in training data is a common root cause.","",""],
+["Explainability and interpretability","Interpretability is how well a human can understand the model's internal logic (a decision tree is interpretable). Explainability is being able to justify individual predictions even for a black box (SHAP feature attributions in Clarify).","Trade-off: more complex models are usually more accurate but less transparent. Regulated decisions (credit, hiring, health) push toward explainable approaches.","trap"],
+["Transparency artifacts","AWS AI Service Cards describe intended use, limitations, design choices and responsible use guidance for an AWS AI service. SageMaker Model Cards document your own models. Data cards and documentation record dataset provenance.","AI Service Cards are AWS's; Model Cards are yours.","trap"],
+["Human-centered design and human in the loop","Design for the people affected: keep humans in control of consequential decisions, review low-confidence or high-risk outputs, collect feedback, and allow appeal or override. Amazon A2I implements review workflows; RLHF uses human preference data to align models.","",""],
+["Guardrails as a responsible AI control","Bedrock Guardrails enforce your policy at runtime: block harmful categories, deny topics, filter words, mask PII and check grounding against the source data to catch hallucination.","The technical control most often named in responsible AI questions.","trap"],
+["Dataset curation and data quality","Representative, diverse, accurate, current and well-documented data with clear provenance and consent. Curated data is the cheapest way to avoid biased or unsafe outputs.","Keyword: reduce bias at the source.",""],
+["Risks of generative AI","Hallucinated content presented as fact, toxic or offensive output, disclosure of personal or confidential data, intellectual property and copyright exposure, plagiarism, deepfakes and misinformation, over-reliance by users, and environmental cost of training.","",""],
+["Legal and regulatory exposure","Biased decisions can breach anti-discrimination law; personal data use is governed by privacy law such as GDPR; regulated sectors require auditability and explanations; generated content raises copyright and licensing questions.","Mitigations: documentation, human oversight, auditing, keeping records of prompts and outputs, and legal review of model and data licenses.",""]
+]},
+{id:"security",t:"Security, compliance and governance for AI",dom:5,b:"Standard AWS security, applied to AI workloads, plus the AI-specific threats.",items:[
+["Shared responsibility model for AI","AWS secures the infrastructure and the managed AI services themselves. You are responsible for your data, who can access models and data, prompt and output handling, IAM permissions, encryption choices, network configuration and how the application uses the model.","Whatever the service, the customer always owns their data and access control.","trap"],
+["IAM for AI workloads","Control who can invoke which model, create or read a knowledge base, launch training jobs or reach an endpoint, using least-privilege IAM policies and roles. SageMaker jobs and Bedrock agents run with execution roles; SageMaker Role Manager builds persona-based roles.","Keyword: restrict which teams can call which foundation model.",""],
+["Encryption for AI data","Data at rest in S3, training volumes, model artifacts, knowledge bases and custom models is encrypted with AWS KMS keys (AWS managed or customer managed). Data in transit uses TLS. Bedrock and SageMaker support customer managed keys.","",""],
+["Network isolation","Run training and endpoints inside a VPC with no internet access, and reach Bedrock, SageMaker and other services through VPC interface endpoints (AWS PrivateLink) so traffic never traverses the public internet. Security groups and subnets apply as usual.","Keyword: traffic must not leave the AWS network.","trap"],
+["Auditing and monitoring","CloudTrail records API calls such as InvokeModel, CreateTrainingJob and knowledge base changes, with who and when. CloudWatch collects metrics, logs and alarms, including Bedrock model invocation logs. AWS Config tracks resource configuration and compliance.","'Who invoked the model and when' is always CloudTrail.","trap"],
+["Amazon Macie","Discovers and classifies sensitive data such as PII in S3, which matters for training data and for documents fed into a knowledge base.","Keyword: find personal data in the training bucket.","trap"],
+["AWS Artifact and AWS Audit Manager","Artifact provides AWS compliance reports (SOC, ISO, PCI) and agreements. Audit Manager continuously collects evidence about your own environment and maps it to frameworks.","",""],
+["Data governance","Manage the full data lifecycle: cataloging with AWS Glue Data Catalog, centralized fine-grained permissions with AWS Lake Formation, quality checks, retention and residency policies, lineage and provenance, and monitoring of access.","Keyword: know where the training data came from and who can use it.",""],
+["Data lineage and provenance","Recording the origin of data and every transformation it went through, plus which data trained which model version. It supports audits, reproducibility and incident investigation.","SageMaker ML Lineage Tracking, Model Registry and Model Cards support this.",""],
+["Compliance standards for AI workloads","AWS AI services fall under AWS compliance programs (SOC, ISO 27001, PCI DSS, HIPAA eligibility, GDPR support, FedRAMP for some services). Your own workload's compliance is still your responsibility, including consent, residency and record keeping.","",""],
+["AI-specific threats","Prompt injection and jailbreaking, prompt leaking, training data poisoning, model inversion and membership inference (extracting data from a model), model theft or extraction, and insecure plugins or over-permissive agent actions. The OWASP Top 10 for LLM Applications catalogs these.","Defenses: guardrails, input and output validation, least privilege for agent tools, encryption, monitoring, and human approval on sensitive actions.","trap"],
+["Governance frameworks and tools","The Generative AI Security Scoping Matrix helps classify a generative AI use case and its controls. The AWS Cloud Adoption Framework for AI, the Well-Architected Machine Learning Lens and AWS Well-Architected reviews guide governance, risk and policy design.","",""]
+]},
+{id:"aws",t:"Supporting AWS services you still need to know",dom:5,b:"The exam assumes basic AWS literacy around the AI services.",items:[
+["Amazon S3","Object storage used as the data lake for training data, documents for knowledge bases, and model artifacts. Encrypted with SSE-S3 or SSE-KMS, private by default, with lifecycle policies and versioning.","",""],
+["AWS Glue, Amazon Athena and Amazon EMR","Glue provides serverless ETL and the Data Catalog; DataBrew prepares data with no code. Athena runs SQL directly on S3. EMR runs Spark and Hadoop for large-scale processing.","Data preparation questions usually point to Glue or Data Wrangler.",""],
+["Amazon Redshift, Amazon Kinesis and AWS Lake Formation","Redshift is the analytics warehouse (with Redshift ML for SQL-based model creation), Kinesis and Data Firehose handle streaming ingestion, and Lake Formation secures the data lake.","",""],
+["Amazon OpenSearch Service","Search and analytics engine that also serves as a vector database for embeddings, including the default store for Bedrock Knowledge Bases through OpenSearch Serverless.","",""],
+["Compute for ML","EC2 GPU instances (P and G families) for training and inference, Trn (Trainium) for training and Inf (Inferentia) for inference, Lambda for lightweight event-driven inference and orchestration, and ECS, EKS or Fargate for containerized workloads. AWS Batch runs large batch jobs.","",""],
+["Storage for training","EBS volumes attached to training instances, EFS for shared file access, and Amazon FSx for Lustre for high-throughput access to S3 data in training and HPC.","",""],
+["Orchestration and delivery","AWS Step Functions and SageMaker Pipelines orchestrate multi-step workflows, EventBridge reacts to events, and API Gateway plus Lambda expose models as APIs.","",""],
+["Cost management for AI","AWS Pricing Calculator estimates before you build, Cost Explorer analyzes spend, Budgets alerts on thresholds, and tags allocate AI costs per project or team.","",""]
+]}
+];
+
+const TRIG=[
+["Labeled historical data, predict a category","Supervised learning (classification)"],["Predict a numeric value","Regression"],["No labels, group similar records","Unsupervised learning (clustering)"],["Agent, environment, reward","Reinforcement learning"],["Great on training data, bad on new data","Overfitting"],["Accuracy drops months after deployment","Model drift, monitor with SageMaker Model Monitor"],["Imbalanced dataset, accuracy is misleading","Use precision, recall, F1 or AUC"],["False negatives are costly (disease, fraud)","Optimize recall"],["False positives are costly (blocking good users)","Optimize precision"],["Score translation quality","BLEU"],["Score summarization quality","ROUGE"],
+["Answer from internal company documents, always current","RAG (Bedrock Knowledge Bases)"],["Change the model's tone or task behavior with labeled examples","Fine-tuning"],["Teach domain vocabulary with unlabeled text","Continued pre-training"],["Improve output with minimum cost and effort","Prompt engineering"],["Give examples in the prompt","Few-shot prompting"],["Ask the model to reason step by step","Chain-of-thought prompting"],["Model must call APIs and complete multi-step tasks","Agents for Amazon Bedrock"],["Block harmful content, denied topics or PII in responses","Guardrails for Amazon Bedrock"],["Detect hallucinated answers against source data","Guardrails contextual grounding check"],["More creative output","Raise temperature"],["More consistent, focused output","Lower temperature"],["Guaranteed throughput or running a custom model in Bedrock","Provisioned Throughput"],["Compare models before choosing one","Bedrock model evaluation"],["Semantic similarity search","Embeddings + vector database"],["Vector store for a Bedrock knowledge base","OpenSearch Serverless (or pgvector, Neptune Analytics, Pinecone)"],
+["Build and train a custom model","Amazon SageMaker AI"],["Pre-trained models ready to deploy or fine-tune","SageMaker JumpStart"],["No-code model building for business analysts","SageMaker Canvas"],["Automatically try algorithms and hyperparameters","SageMaker Autopilot"],["Create labeled training data","SageMaker Ground Truth"],["Prepare and transform data visually","SageMaker Data Wrangler"],["Detect bias and explain predictions","SageMaker Clarify"],["Detect drift in a deployed model","SageMaker Model Monitor"],["Document a model's purpose, risk and performance","SageMaker Model Cards"],["Automate an ML workflow end to end","SageMaker Pipelines"],["Score a large dataset offline, no endpoint","Batch transform"],["Intermittent traffic, scale to zero","Serverless inference"],["Save up to 90% on training","Managed spot training"],["Purpose-built chip for training / for inference","Trainium / Inferentia"],
+["Extract text and tables from scanned forms","Amazon Textract"],["Analyze images or video","Amazon Rekognition"],["Sentiment, entities or PII in text","Amazon Comprehend"],["Speech to text","Amazon Transcribe"],["Text to speech","Amazon Polly"],["Translate languages","Amazon Translate"],["Chatbot with intents and slots","Amazon Lex"],["Natural-language enterprise search","Amazon Kendra"],["Product recommendations","Amazon Personalize"],["Online fraud detection","Amazon Fraud Detector"],["Human review of low-confidence predictions","Amazon Augmented AI (A2I)"],["Assistant over company data for employees","Amazon Q Business"],["Coding assistant","Amazon Q Developer"],["Generative AI app with foundation models","Amazon Bedrock"],
+["Who invoked the model and when","AWS CloudTrail"],["Find PII in the training bucket","Amazon Macie"],["Keep model traffic off the public internet","VPC interface endpoint (PrivateLink)"],["Encrypt training data and model artifacts","AWS KMS"],["Central fine-grained permissions on the data lake","AWS Lake Formation"],["Catalog datasets and schemas","AWS Glue Data Catalog"],["AWS compliance reports","AWS Artifact"],["Documentation of an AWS AI service's intended use and limits","AI Service Card"]
+];
+
+const PAIRS=[
+["Bedrock vs SageMaker AI","Bedrock: consume and customize existing foundation models through an API, serverless, no ML expertise needed. SageMaker AI: build, train, tune, deploy and operate your own models with full control."],
+["RAG vs fine-tuning","RAG injects retrieved company data into the prompt at query time, with no retraining, ideal for facts that change and for citations. Fine-tuning retrains weights on labeled examples to change behavior, tone or format, and is fixed until you retrain."],
+["Fine-tuning vs continued pre-training","Fine-tuning uses labeled prompt/response pairs to shape behavior. Continued pre-training uses large unlabeled domain text to teach vocabulary and domain knowledge."],
+["Prompt engineering vs fine-tuning","Prompt engineering costs nothing and takes minutes; fine-tuning costs money and needs data. Try prompting (and few-shot examples) first."],
+["Knowledge Bases vs Agents vs Guardrails","Knowledge Bases retrieve your data for grounded answers. Agents take actions by calling APIs and Lambda. Guardrails filter and block unsafe prompts and responses."],
+["Temperature vs top-p vs top-k","All control randomness at inference. Temperature scales the probability distribution; top-p keeps the smallest set of tokens whose probability sums to p; top-k keeps the k most likely tokens. None of them changes the model."],
+["Parameters vs hyperparameters","Parameters (weights) are learned during training. Hyperparameters are set by you before training, such as learning rate and epochs."],
+["Amazon Q Business vs Amazon Kendra vs Bedrock Knowledge Bases","Q Business is a ready-made assistant over connected company data. Kendra is an intelligent search service. Knowledge Bases is the managed RAG component you build your own application on."],
+["Amazon Lex vs Amazon Q vs Bedrock","Lex: structured chatbot with intents you define. Q: ready-made generative assistant. Bedrock: build your own generative application."],
+["Textract vs Rekognition vs Comprehend","Textract reads documents (text, forms, tables). Rekognition analyzes images and video content. Comprehend analyzes the meaning of text."],
+["Transcribe vs Polly","Transcribe converts speech to text. Polly converts text to speech."],
+["Personalize vs Forecast","Personalize recommends items to users. Forecast predicts future values of a time series."],
+["Canvas vs Autopilot vs JumpStart","Canvas: no-code UI for analysts. Autopilot: automated model building inside SageMaker with full visibility. JumpStart: deploy or fine-tune existing pre-trained models."],
+["Ground Truth vs Augmented AI (A2I)","Ground Truth labels data before training. A2I sends predictions to humans for review after the model runs."],
+["Clarify vs Model Monitor","Clarify measures bias and explains predictions. Model Monitor watches a deployed model for data quality, drift and bias drift over time."],
+["Model Cards vs AI Service Cards","Model Cards document models you build. AI Service Cards are AWS's public documentation of its own AI services."],
+["Supervised vs unsupervised vs reinforcement","Labeled data and known answers; unlabeled data and discovered structure; rewards from an environment."],
+["Overfitting vs underfitting","Overfitting memorizes training data and fails on new data. Underfitting is too simple and fails on both."],
+["Precision vs recall","Precision avoids false alarms. Recall avoids misses."],
+["BLEU vs ROUGE vs perplexity","BLEU for translation, ROUGE for summarization, perplexity for how well a model predicts text."],
+["Real-time vs serverless vs asynchronous vs batch inference","Constant low-latency traffic; intermittent traffic that can scale to zero; large payloads or long jobs; scoring a whole dataset offline."],
+["Trainium vs Inferentia","Trainium accelerates training. Inferentia accelerates inference."],
+["Hallucination vs bias vs toxicity","Hallucination is confidently wrong content. Bias is systematically unfair outcomes. Toxicity is harmful or offensive content."],
+["Prompt injection vs jailbreaking vs prompt leaking","Injection hides new instructions in the input. Jailbreaking bypasses safety rules. Leaking extracts the system prompt or hidden context."]
+];
+
+const NUMS=[
+["Exam format","65 questions, 50 scored, 90 minutes, 700/1000 to pass, $100"],["Question types","Multiple choice, multiple response, ordering, matching, case study"],["Domain weights","AI/ML 20%, generative AI 24%, applications of FMs 28%, responsible AI 14%, security and governance 14%"],
+["Token size","About 4 characters, roughly 0.75 words in English"],["Temperature and top-p range","0 to 1 (higher means more random)"],["Bedrock pricing modes","On-demand per token, batch, and Provisioned Throughput (required for custom models)"],["Managed spot training savings","Up to 90%"],["Customization ladder cost order","Prompting < RAG < fine-tuning < pre-training from scratch"],["Order of concepts","AI > ML > deep learning > generative AI"]
+];
+
+const TBL1=`<div class="tblwrap wide"><table>
+<thead><tr><th>If the task is…</th><th>Use</th><th>Why, and what it is not</th></tr></thead><tbody>
+<tr class="f"><th>Extract text, forms and tables from scanned documents</th><td>Amazon Textract</td><td>Understands document structure, not just OCR. Not Rekognition, which is for image content.</td></tr>
+<tr class="f"><th>Identify objects, faces or unsafe content in images and video</th><td>Amazon Rekognition</td><td>Custom Labels can learn your own objects.</td></tr>
+<tr class="f"><th>Sentiment, entities, PII or topics in text</th><td>Amazon Comprehend</td><td>Often chained after Textract or Transcribe.</td></tr>
+<tr class="f"><th>Convert audio to text</th><td>Amazon Transcribe</td><td>Call Analytics for contact centers, Medical for clinical audio.</td></tr>
+<tr class="f"><th>Convert text to speech</th><td>Amazon Polly</td><td>Neural voices, SSML control.</td></tr>
+<tr class="f"><th>Translate between languages</th><td>Amazon Translate</td><td>Real-time or batch, custom terminology.</td></tr>
+<tr class="f"><th>Chatbot with defined intents</th><td>Amazon Lex</td><td>For a generative assistant over documents, use Amazon Q Business or Bedrock.</td></tr>
+<tr class="f"><th>Search enterprise documents in natural language</th><td>Amazon Kendra</td><td>Amazon Q Business adds generative answers on top of connected sources.</td></tr>
+<tr class="f"><th>Recommend products or content</th><td>Amazon Personalize</td><td>Needs user, item and interaction data.</td></tr>
+<tr class="f"><th>Detect online fraud</th><td>Amazon Fraud Detector</td><td>Purpose-built; SageMaker if you need a fully custom model.</td></tr>
+<tr class="f"><th>Send low-confidence predictions to humans</th><td>Amazon Augmented AI (A2I)</td><td>Human in the loop after inference; Ground Truth is labeling before training.</td></tr>
+<tr class="f"><th>Build a generative AI application</th><td>Amazon Bedrock</td><td>Serverless access to foundation models, plus RAG, agents and guardrails.</td></tr>
+<tr class="f"><th>Build and operate a custom ML model</th><td>Amazon SageMaker AI</td><td>Full control of data, training, deployment and monitoring.</td></tr>
+</tbody><caption>Most Domain 3 questions are this table in disguise: read the task, pick the service.</caption></table></div>`;
+
+const TBL2=`<div class="tblwrap wide"><table>
+<thead><tr><th>Metric</th><th>What it measures</th><th>Use it when</th></tr></thead><tbody>
+<tr class="f"><th>Accuracy</th><td>Correct predictions over all predictions</td><td>Classes are balanced and every error costs the same</td></tr>
+<tr class="f"><th>Precision</th><td>Of predicted positives, how many were right</td><td>False positives are expensive (blocking good transactions, spam filters)</td></tr>
+<tr class="f"><th>Recall</th><td>Of actual positives, how many were found</td><td>False negatives are dangerous (disease screening, fraud, safety)</td></tr>
+<tr class="f"><th>F1 score</th><td>Balance of precision and recall</td><td>Imbalanced data and both error types matter</td></tr>
+<tr class="f"><th>AUC-ROC</th><td>Ability to separate classes at all thresholds</td><td>Comparing classifiers overall</td></tr>
+<tr class="f"><th>RMSE / MAE / R²</th><td>Size of numeric prediction error, variance explained</td><td>Regression problems</td></tr>
+<tr class="f"><th>BLEU</th><td>Overlap with reference translations</td><td>Machine translation</td></tr>
+<tr class="f"><th>ROUGE</th><td>Overlap with reference summaries</td><td>Summarization</td></tr>
+<tr class="f"><th>BERTScore</th><td>Semantic similarity using embeddings</td><td>Generated text where wording may differ but meaning matters</td></tr>
+<tr class="f"><th>Perplexity</th><td>How well a model predicts the next token (lower is better)</td><td>Comparing language models</td></tr>
+<tr class="f"><th>Human evaluation</th><td>Relevance, tone, helpfulness, safety</td><td>Anything automatic metrics cannot judge; supported by Bedrock evaluation</td></tr>
+<tr class="f"><th>Business metrics</th><td>Conversion, satisfaction, cost per task, ROI</td><td>Deciding whether the solution is worth running</td></tr>
+</tbody><caption>Classification metrics come from the confusion matrix; generative metrics compare generated text with references or human judgement.</caption></table></div>`;
+
+
+/* ---------- helpers ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const KEY="clf-c02-known-v1";
+let known=new Set();
+try{known=new Set(JSON.parse(localStorage.getItem(KEY)||"[]"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify([...known]))}catch(e){}};
+const TAGN={trap:"Often confused",serverless:"Serverless",global:"Global",legacy:"Retired or closing"};
+const CHECK='<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+let domF=0, hideKnown=false;
+const ALL=[];
+S.forEach(s=>s.items.forEach(it=>ALL.push({sec:s.id,n:it[0],d:it[1],t:it[2],g:it[3],id:s.id+"-"+slug(it[0])})));
+
+/* ---------- render ---------- */
+function render(){
+  const dombar=document.getElementById("dombar");
+  dombar.innerHTML=Object.entries(DOM).map(([k,v])=>`<button class="dom" style="--dc:var(--d${k});flex:${v.w} 1 0" data-dom="${k}" aria-pressed="false"><span class="pct">${v.w}%</span><span class="dn">${v.n}</span><span class="dk">${v.k}</span></button>`).join("");
+  dombar.querySelectorAll(".dom").forEach(b=>b.addEventListener("click",()=>{const d=+b.dataset.dom;domF=domF===d?0:d;dombar.querySelectorAll(".dom").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.dom===domF)));apply();}));
+
+  let side='<div class="grp">Services and concepts</div>';
+  side+=S.map(s=>`<a href="#${s.id}" data-sec="${s.id}" style="--dc:var(--d${s.dom})"><span>${esc(s.t)}</span><span class="cnt" data-cnt="${s.id}"></span></a>`).join("");
+  side+='<div class="grp">Review sheets</div>';
+  side+=[["triggers","Trigger words"],["pairs","Look-alikes"],["numbers","Numbers to memorize"]].map(([id,t])=>`<a href="#${id}" data-sec="${id}" style="--dc:var(--d0)"><span>${t}</span><span class="cnt"></span></a>`).join("");
+  document.getElementById("side").innerHTML=side;
+
+  let h="";
+  S.forEach(s=>{
+    h+=`<section class="sec" id="${s.id}" data-dom="${s.dom}" style="--dc:var(--d${s.dom})"><div class="sec-h"><h2>${esc(s.t)}</h2><span class="dchip">Domain ${s.dom}: ${DOM[s.dom].n}</span></div><p class="blurb">${esc(s.b)}</p>`;
+    if(s.extra==="t1")h+=TBL1;
+    if(s.extra==="t2")h+=TBL2;
+    h+='<div class="list">';
+    s.items.forEach(it=>{
+      const id=s.id+"-"+slug(it[0]);
+      const tags=(it[3]||"").split(" ").filter(Boolean).map(g=>`<span class="tag ${g}">${TAGN[g]}</span>`).join("");
+      const txt=(it[0]+" "+it[1]+" "+it[2]).toLowerCase();
+      h+=`<article class="svc" data-id="${id}" data-text="${esc(txt)}" tabindex="0"><button class="chk" aria-pressed="false" aria-label="Mark ${esc(it[0])} as known">${CHECK}</button><div class="nm"><h3>${esc(it[0])}</h3>${tags?`<div class="tags">${tags}</div>`:""}</div><div class="bd"><p class="d">${esc(it[1])}</p>${it[2]?`<p class="tip"><b>Exam angle:</b> ${esc(it[2])}</p>`:""}</div></article>`;
+    });
+    h+="</div></section>";
+  });
+  h+=`<section class="sec" id="triggers" data-dom="0" style="--dc:var(--d0)"><div class="sec-h"><h2>Trigger words</h2></div><p class="blurb">Most questions hinge on one phrase. When you see the words on the left, the answer is almost always on the right. Also available as a flashcard deck.</p><div class="tblwrap trig"><table><thead><tr><th>If the question says…</th><th>Think</th></tr></thead><tbody>${TRIG.map(([a,b])=>`<tr class="f" data-text="${esc((a+" "+b).toLowerCase())}"><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  h+=`<section class="sec" id="pairs" data-dom="0" style="--dc:var(--d0)"><div class="sec-h"><h2>Look-alikes</h2></div><p class="blurb">The exam's favorite distractors are the neighbor of the right answer. One line to tell each group apart.</p><div class="list">${PAIRS.map(([a,b])=>`<div class="pair" data-text="${esc((a+" "+b).toLowerCase())}"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join("")}</div></section>`;
+  h+=`<section class="sec" id="numbers" data-dom="0" style="--dc:var(--d0)"><div class="sec-h"><h2>Numbers to memorize</h2></div><p class="blurb">The exam rarely asks for exact figures, but these show up inside answer options often enough to matter.</p><div class="tblwrap"><table><tbody>${NUMS.map(([a,b])=>`<tr class="f" data-text="${esc((a+" "+b).toLowerCase())}"><th>${esc(a)}</th><td>${esc(b)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  document.getElementById("content").innerHTML=h;
+
+  document.querySelectorAll("#content tr.f:not([data-text])").forEach(tr=>tr.dataset.text=tr.textContent.toLowerCase());
+  document.querySelectorAll(".svc").forEach(el=>{
+    const id=el.dataset.id,btn=el.querySelector(".chk");
+    btn.addEventListener("click",e=>{e.stopPropagation();known.has(id)?known.delete(id):known.add(id);save();syncKnown();if(hideKnown)apply();});
+    el.addEventListener("click",()=>{if(document.body.classList.contains("recall"))el.classList.toggle("show");});
+    el.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target===el){e.preventDefault();if(document.body.classList.contains("recall"))el.classList.toggle("show");}});
+  });
+  syncKnown();
+}
+
+function syncKnown(){
+  document.querySelectorAll(".svc").forEach(el=>{const k=known.has(el.dataset.id);el.classList.toggle("known",k);el.querySelector(".chk").setAttribute("aria-pressed",String(k));});
+  const total=ALL.length, k=ALL.filter(x=>known.has(x.id)).length;
+  document.getElementById("progFill").style.width=(100*k/total)+"%";
+  document.getElementById("progText").innerHTML=`<b>${k}</b> of ${total} services and concepts marked known`;
+  S.forEach(s=>{const n=s.items.length,kk=ALL.filter(x=>x.sec===s.id&&known.has(x.id)).length;const c=document.querySelector(`[data-cnt="${s.id}"]`);if(c){c.textContent=kk+"/"+n;c.classList.toggle("done",kk===n);}});
+}
+
+function apply(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  document.querySelectorAll("#content [data-text]").forEach(el=>{
+    let v=!q||el.dataset.text.includes(q);
+    if(hideKnown&&el.dataset.id&&known.has(el.dataset.id))v=false;
+    el.hidden=!v;
+  });
+  document.querySelectorAll("#content .tblwrap").forEach(t=>{const rows=t.querySelectorAll("tr.f");if(rows.length)t.hidden=![...rows].some(r=>!r.hidden);});
+  document.querySelectorAll(".list").forEach(l=>{const vis=[...l.children].filter(c=>!c.hidden);[...l.children].forEach(c=>c.classList.remove("first"));if(vis[0])vis[0].classList.add("first");l.hidden=!vis.length;});
+  let any=false;
+  document.querySelectorAll("#content .sec").forEach(sec=>{
+    const d=+sec.dataset.dom;
+    const domOK=!domF||d===domF;
+    const has=!!sec.querySelector("[data-text]:not([hidden])");
+    sec.hidden=!(domOK&&has);
+    if(!sec.hidden)any=true;
+    const a=document.querySelector(`.side a[data-sec="${sec.id}"]`);if(a)a.hidden=sec.hidden;
+  });
+  document.getElementById("empty").hidden=any;
+}
+
+/* ---------- toolbar ---------- */
+render();apply();
+document.getElementById("q").addEventListener("input",apply);
+document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&!document.getElementById("fc").open){e.preventDefault();document.getElementById("q").focus();}});
+const recallBtn=document.getElementById("recallBtn");
+recallBtn.addEventListener("click",()=>{const on=document.body.classList.toggle("recall");recallBtn.setAttribute("aria-pressed",String(on));document.querySelectorAll(".svc.show").forEach(x=>x.classList.remove("show"));});
+const hideBtn=document.getElementById("hideBtn");
+hideBtn.addEventListener("click",()=>{hideKnown=!hideKnown;hideBtn.setAttribute("aria-pressed",String(hideKnown));apply();});
+const themeBtn=document.getElementById("themeBtn");
+try{const t=localStorage.getItem("clf-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}
+themeBtn.addEventListener("click",()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const nt=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nt;try{localStorage.setItem("clf-theme",nt)}catch(e){}});
+
+/* ---------- flashcards ---------- */
+const fc=document.getElementById("fc"),fcDeck=document.getElementById("fcDeck"),fcDir=document.getElementById("fcDir"),fcUnk=document.getElementById("fcUnk");
+const fcFront=document.getElementById("fcFront"),fcBack=document.getElementById("fcBack"),fcCount=document.getElementById("fcCount");
+fcDeck.innerHTML='<option value="__all">All services and concepts</option><option value="__trap">Only "often confused"</option><option value="__trig">Trigger words</option>'+S.map(s=>`<option value="${s.id}">${esc(s.t)}</option>`).join("");
+let deck=[],pos=0;
+const rx=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+function mask(text,name){
+  let out=text;
+  const base=name.replace(/^(Amazon|AWS)\s+/,"").split(/\s+(?:vs|and|\/)\s+|\s*\(|,/)[0].trim();
+  [name,base].filter(x=>x&&x.length>2).forEach(n=>{out=out.replace(new RegExp(rx(n),"gi"),"▢▢▢");});
+  return out;
+}
+function build(){
+  const v=fcDeck.value,dir=fcDir.value;
+  if(v==="__trig"){
+    deck=TRIG.map(([a,b])=>dir==="n"?{f:esc(a),long:true,b:`<span class="ans">${esc(b)}</span>`,id:null}:{f:esc(b),long:false,b:`<span class="ans">${esc(a)}</span>`,id:null});
+  }else{
+    let items=ALL.filter(x=>v==="__all"||(v==="__trap"?(x.g||"").includes("trap"):x.sec===v));
+    if(fcUnk.checked)items=items.filter(x=>!known.has(x.id));
+    deck=items.map(x=>dir==="n"
+      ?{f:esc(x.n),long:false,b:`${esc(x.d)}${x.t?`<p class="tip"><b>Exam angle:</b> ${esc(x.t)}</p>`:""}`,id:x.id}
+      :{f:esc(mask(x.d,x.n)),long:true,b:`<span class="ans">${esc(x.n)}</span>${x.t?`<p class="tip"><b>Exam angle:</b> ${esc(x.t)}</p>`:""}`,id:x.id});
+  }
+  for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+  pos=0;show();
+}
+function show(){
+  if(pos>=deck.length){
+    fcFront.className="front long";
+    fcFront.textContent=deck.length?"Deck finished. Shuffle to go again, or pick another deck.":"No cards here. Everything in this deck is marked known; untick “Skip cards marked known” to review it anyway.";
+    fcBack.hidden=true;fcCount.textContent=deck.length?`${deck.length} cards reviewed`:"";return;
+  }
+  const c=deck[pos];
+  fcFront.className="front"+(c.long?" long":"");
+  fcFront.innerHTML=c.f;fcBack.innerHTML=c.b;fcBack.hidden=true;
+  fcCount.textContent=`Card ${pos+1} of ${deck.length}. Space flips, 1 = again, 2 = I know it.`;
+}
+const flip=()=>{if(pos<deck.length)fcBack.hidden=!fcBack.hidden;};
+const again=()=>{if(pos<deck.length){deck.push(deck[pos]);pos++;show();}};
+const know=()=>{if(pos<deck.length){const c=deck[pos];if(c.id){known.add(c.id);save();syncKnown();}pos++;show();}};
+document.getElementById("fcBtn").addEventListener("click",()=>{fc.showModal();build();document.getElementById("fcCard").focus();});
+document.getElementById("fcClose").addEventListener("click",()=>fc.close());
+document.getElementById("fcStart").addEventListener("click",build);
+[fcDeck,fcDir,fcUnk].forEach(el=>el.addEventListener("change",build));
+document.getElementById("fcCard").addEventListener("click",flip);
+document.getElementById("fcFlip").addEventListener("click",flip);
+document.getElementById("fcAgain").addEventListener("click",again);
+document.getElementById("fcKnow").addEventListener("click",know);
+fc.addEventListener("close",()=>{if(hideKnown)apply();});
+fc.addEventListener("keydown",e=>{
+  if(["SELECT","INPUT"].includes(e.target.tagName))return;
+  if(e.key===" "){e.preventDefault();flip();}
+  else if(e.key==="1"||e.key==="ArrowLeft"){again();}
+  else if(e.key==="2"||e.key==="ArrowRight"){know();}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CLF-C02 practice exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F5;--surface:#FFFFFF;--surface2:#F5F7FA;--ink:#172031;--muted:#5A667A;--line:#D8DEE7;--line-strong:#A9B4C4;
+  --accent:#1F5FAD;--accent-soft:#E2EBF7;--on-accent:#FFFFFF;--warn:#9A4A08;--warn-soft:#FBEADB;
+  --ok:#1E7F55;--ok-soft:#DDF1E6;--bad:#B0364A;--bad-soft:#F8E1E5;
+  --d1:#6A4DB8;--d2:#B0364A;--d3:#1F5FAD;--d4:#27805F;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+    --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;
+    --ok:#62C695;--ok-soft:#173528;--bad:#EE8394;--bad-soft:#3D1D24;
+    --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151D;--surface:#18202B;--surface2:#1F2835;--ink:#E3E8F0;--muted:#98A5B8;--line:#2B3646;--line-strong:#4A5870;
+  --accent:#86B4F0;--accent-soft:#1F3350;--on-accent:#0E1622;--warn:#F2AE6B;--warn-soft:#3A2A1C;
+  --ok:#62C695;--ok-soft:#173528;--bad:#EE8394;--bad-soft:#3D1D24;
+  --d1:#A993EE;--d2:#EE8394;--d3:#86B4F0;--d4:#6CCFA4;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:900px;margin:0 auto;padding:28px 20px 90px}
+.tbtn{font-size:15px;padding:9px 14px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--ink)}
+.tbtn:disabled{opacity:.45;cursor:not-allowed}
+.tbtn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface)}
+
+/* Start */
+h1{font-size:clamp(30px,4.6vw,48px);line-height:1.02;letter-spacing:-0.025em;margin:0;max-width:16ch}
+.sub{color:var(--muted);max-width:64ch;margin:10px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:6px 26px;margin:20px 0}
+.facts div{display:flex;gap:7px;align-items:baseline}
+.facts dt{color:var(--muted);font-size:14px}
+.facts dd{margin:0;font-weight:700}
+.dombar{display:flex;gap:6px;margin:0 0 26px}
+.dom{flex:var(--w) 1 0;min-width:0;border-top:5px solid var(--dc);border-radius:4px 4px 12px 12px;padding:10px 12px 12px;background:color-mix(in srgb,var(--dc) 11%,var(--surface))}
+.dom .pct{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:26px;font-weight:700;color:var(--dc);line-height:1;display:block}
+.dom .dn{font-size:13.5px;display:block;margin-top:5px;line-height:1.25}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode{text-align:left;border:1px solid var(--line-strong);background:var(--surface);border-radius:14px;padding:18px;cursor:pointer}
+.mode:hover{border-color:var(--ink)}
+.mode h2{margin:0 0 4px;font-size:22px}
+.mode p{margin:0;color:var(--muted);font-size:15.5px}
+.opts{display:flex;flex-wrap:wrap;gap:8px 22px;margin:16px 0 0;font-size:15.5px}
+.opts label{display:flex;gap:7px;align-items:center;cursor:pointer}
+.resume{margin:18px 0 0;padding:14px 16px;border-radius:12px;background:var(--accent-soft);display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.resume p{margin:0}
+.hist{margin-top:34px}
+.hist h2{font-size:22px;margin:0 0 8px}
+.hist table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+.hist th,.hist td{padding:8px 12px;text-align:left;border-top:1px solid var(--line)}
+.hist thead th{background:var(--surface2);border-top:0;font-family:"Bricolage Grotesque",system-ui,sans-serif}
+.note{color:var(--muted);font-size:14.5px;max-width:72ch;margin:26px 0 0}
+
+/* Run */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar .count{font-weight:700;font-variant-numeric:tabular-nums}
+.bar .timer{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:auto}
+.bar .timer.low{color:var(--bad)}
+.pbar{height:5px;border-radius:99px;background:var(--line);overflow:hidden;flex:1 1 100%}
+.pbar div{height:100%;background:var(--accent);width:0}
+details.map{margin:0 0 16px}
+details.map summary{cursor:pointer;color:var(--muted);font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:5px;margin-top:10px}
+.grid button{height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px;font-variant-numeric:tabular-nums;position:relative}
+.grid button.ans{background:var(--accent-soft);border-color:var(--accent-soft)}
+.grid button.ok{background:var(--ok-soft);border-color:var(--ok)}
+.grid button.no{background:var(--bad-soft);border-color:var(--bad)}
+.grid button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.grid button.fl::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--warn)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 22px 20px}
+.qmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.dchip{font-size:13px;color:var(--dc);border:1px solid color-mix(in srgb,var(--dc) 45%,transparent);padding:1px 9px;border-radius:99px}
+.flag{margin-left:auto;font-size:14px;padding:5px 10px}
+.flag[aria-pressed="true"]{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.qtext{font-size:19px;line-height:1.5;margin:0 0 6px}
+.choose{font-weight:700;color:var(--accent);margin:0 0 12px}
+.olist{display:grid;gap:8px;margin-top:14px}
+.opt{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line-strong);border-radius:12px;cursor:pointer;background:var(--surface)}
+.opt:hover{border-color:var(--ink)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .ltr{width:28px;height:28px;display:grid;place-items:center;border:1.5px solid var(--line-strong);font-weight:700;font-size:14px;border-radius:50%}
+.opt.multi .ltr{border-radius:7px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .ltr{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.opt.locked{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .ltr{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .ltr{background:var(--bad);border-color:var(--bad);color:#fff}
+.fb{margin-top:16px;padding:14px 16px;border-radius:12px;border-left:4px solid var(--fbc);background:color-mix(in srgb,var(--fbc) 10%,var(--surface))}
+.fb b.v{color:var(--fbc);display:block;margin-bottom:4px;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:18px}
+.fb p{margin:0}
+.nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.nav .sp{flex:1}
+.hint{color:var(--muted);font-size:13.5px;margin:14px 0 0}
+
+/* Results */
+.score{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:6px 0 4px}
+.score .big{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:clamp(56px,10vw,92px);font-weight:700;line-height:1;letter-spacing:-0.03em}
+.score .of{color:var(--muted);font-size:18px}
+.verdict{margin:6px 0 22px;max-width:68ch}
+.verdict b{color:var(--vc)}
+.drows{display:grid;gap:10px;margin-bottom:28px}
+.drow{display:grid;grid-template-columns:230px 1fr 70px;gap:12px;align-items:center;font-size:15.5px}
+.drow .tr{height:12px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.drow .tr div{height:100%;background:var(--dc)}
+.drow .tr::after{content:"";position:absolute;left:70%;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.35}
+.drow .pc{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.rfilter{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.rev{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;border-left:5px solid var(--rc)}
+.rev h3{font-size:15px;margin:0 0 6px;color:var(--muted);font-weight:500;display:flex;gap:10px;flex-wrap:wrap}
+.rev .qt{margin:0 0 10px;font-size:17px}
+.rev ul{margin:0 0 10px;padding:0;list-style:none;display:grid;gap:4px}
+.rev li{padding:5px 10px;border-radius:8px;font-size:15.5px}
+.rev li.c{background:var(--ok-soft)}
+.rev li.w{background:var(--bad-soft)}
+.rev li .tg{font-size:12.5px;font-weight:700;margin-left:6px}
+.rev .ex{margin:0;font-size:15.5px;padding-left:11px;border-left:3px solid var(--warn)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px}
+@media (max-width:700px){.modes{grid-template-columns:1fr}.dombar{flex-wrap:wrap}.dom{flex:1 1 40%}.drow{grid-template-columns:1fr 60px}.drow .tr{grid-column:1/-1;grid-row:2}.qcard{padding:18px 16px}.qtext{font-size:18px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start">
+  <h1>CLF-C02 practice exam</h1>
+  <p class="sub">65 original questions written in the style of the real AWS Certified Cloud Practitioner exam: scenario-based, single answer or "Choose TWO", weighted by the official domains. Every question has an explanation of why the right answer is right and why the others are wrong.</p>
+  <dl class="facts">
+    <div><dt>Questions</dt><dd>65</dd></div>
+    <div><dt>Real exam time</dt><dd>90 minutes</dd></div>
+    <div><dt>Target</dt><dd>75%+ before booking</dd></div>
+  </dl>
+  <div class="dombar" id="dombar"></div>
+  <div class="modes">
+    <button class="mode" data-mode="exam"><h2>Exam mode</h2><p>90-minute timer, flag questions for review, no feedback until you finish. Use this to test readiness.</p></button>
+    <button class="mode" data-mode="practice"><h2>Practice mode</h2><p>No timer. Check each answer and read the explanation right away. Use this to learn.</p></button>
+  </div>
+  <div class="opts">
+    <label><input type="checkbox" id="optShufQ" checked> Shuffle question order</label>
+    <label><input type="checkbox" id="optShufA" checked> Shuffle answer order</label>
+  </div>
+  <div class="resume" id="resume" hidden><p id="resumeText"></p><div style="display:flex;gap:8px"><button class="tbtn primary" id="resumeBtn">Resume</button><button class="tbtn" id="discardBtn">Discard</button></div></div>
+  <div class="resume" id="lastRes" hidden><p id="lastResText"></p><button class="tbtn primary" id="lastResBtn">See last results and mistakes</button></div>
+  <div class="hist" id="hist" hidden><h2>Your attempts</h2><div id="histTable"></div></div>
+  <p class="note">These are not leaked exam questions. Using real exam content ("dumps") breaks the AWS Certification Program Agreement and can get a certification revoked. They cover the same topics at the same depth. For more official practice, AWS Skill Builder has a free official practice question set for CLF-C02. Studying a topic? Open the <a href="https://claude.ai/artifact/CYT9znqeE8zz761tWFkjfc" target="_blank" rel="noopener">field guide</a>.</p>
+</section>
+
+<section id="run" hidden>
+  <div class="bar">
+    <span class="count" id="count"></span>
+    <button class="tbtn" id="exitBtn">Save and exit</button>
+    <button class="tbtn primary" id="finishBtn">Finish exam</button>
+    <span class="timer" id="timer"></span>
+    <div class="pbar"><div id="pfill"></div></div>
+  </div>
+  <details class="map" id="map"><summary>Question map</summary><div class="grid" id="grid"></div><div class="legend" id="legend"></div></details>
+  <div class="qcard" id="qcard"></div>
+  <p class="hint">Keys: <kbd>A</kbd>–<kbd>E</kbd> choose, <kbd>F</kbd> flag, <kbd>←</kbd> <kbd>→</kbd> move, <kbd>Enter</kbd> check (practice).</p>
+</section>
+
+<section id="result" hidden>
+  <h1 style="font-size:clamp(26px,4vw,38px)">Results</h1>
+  <div class="score"><span class="big" id="rPct"></span><span class="of" id="rRaw"></span></div>
+  <p class="verdict" id="rVerdict"></p>
+  <div class="drows" id="rDom"></div>
+  <div class="acts">
+    <button class="tbtn primary" id="againBtn">New attempt</button>
+    <button class="tbtn" id="wrongBtn">Retake only the ones I missed</button>
+    <button class="tbtn" id="homeBtn">Back to start</button>
+    <button class="tbtn" id="copyBtn">Copy my mistakes for Claude</button>
+  </div>
+  <div id="copyBox" hidden style="margin:0 0 24px"><p class="hint" id="copyMsg" style="margin:0 0 6px"></p><textarea id="copyTa" readonly style="width:100%;min-height:180px;font:14px/1.45 ui-monospace,Menlo,Consolas,monospace;padding:10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)"></textarea></div>
+  <h2 style="margin:0 0 6px">Review</h2>
+  <div class="rfilter" id="rFilter">
+    <button class="tbtn" data-f="all" aria-pressed="false">All</button>
+    <button class="tbtn" data-f="wrong" aria-pressed="true">Wrong or unanswered</button>
+    <button class="tbtn" data-f="flag" aria-pressed="false">Flagged</button>
+  </div>
+  <div id="rList"></div>
+</section>
+
+</div>
+<script>
+const DOM={1:{n:"Cloud Concepts",w:24},2:{n:"Security and Compliance",w:30},3:{n:"Cloud Technology and Services",w:34},4:{n:"Billing, Pricing, and Support",w:12}};
+
+const Q=[
+/* ---------- Domain 1 ---------- */
+{d:1,q:"A startup wants to stop buying servers up front and instead pay only for the IT resources it actually consumes each month. Which advantage of cloud computing does this describe?",o:["Benefit from massive economies of scale","Trade fixed expense for variable expense","Go global in minutes","Increase speed and agility"],a:[1],e:"Replacing capital expense (buying hardware) with pay-as-you-go operating expense is 'trade fixed expense for variable expense'. Economies of scale is about AWS's lower prices from aggregated usage; agility is about speed of provisioning."},
+{d:1,q:"Which pillar of the AWS Well-Architected Framework focuses on a workload's ability to recover from infrastructure disruptions and dynamically acquire resources to meet demand?",o:["Performance Efficiency","Operational Excellence","Reliability","Cost Optimization"],a:[2],e:"Reliability covers recovering from failures and scaling to meet demand. Performance Efficiency is about using resources efficiently (right types and sizes); Operational Excellence is about running and monitoring systems and improving processes."},
+{d:1,q:"A company has a corporate goal to reduce the environmental impact of its cloud workloads by maximizing utilization and choosing efficient hardware. Which Well-Architected pillar addresses this goal?",o:["Sustainability","Reliability","Performance Efficiency","Security"],a:[0],e:"Sustainability, the sixth pillar, focuses on minimizing the environmental impact of running cloud workloads."},
+{d:1,q:"A company must move a legacy application to AWS as quickly as possible, with no changes to the application code or architecture. Which migration strategy should it use?",o:["Refactor","Replatform","Repurchase","Rehost"],a:[3],e:"Rehost (lift-and-shift) moves the application as-is, typically onto EC2. Replatform makes small optimizations, Refactor redesigns the app, and Repurchase replaces it with a different product."},
+{d:1,q:"A company is migrating a self-managed MySQL database from on-premises servers to Amazon RDS for MySQL to reduce administrative work. The application code will not change. Which migration strategy is this?",o:["Rehost","Replatform","Retain","Refactor"],a:[1],e:"Replatform ('lift, tinker and shift') makes a targeted optimization, like moving to a managed database, without changing the core architecture. Rehost would put MySQL on EC2 unchanged."},
+{d:1,q:"A company plans to retire its on-premises CRM application and start using a SaaS CRM product instead. Which migration strategy does this represent?",o:["Repurchase","Relocate","Rehost","Retire"],a:[0],e:"Repurchase ('drop and shop') means moving to a different product, usually SaaS. Retire means simply turning the application off with no replacement."},
+{d:1,q:"Which perspective of the AWS Cloud Adoption Framework (AWS CAF) helps organizations evolve their culture, prepare staff with new skills, and manage organizational change?",o:["Governance","Business","People","Platform"],a:[2],e:"The People perspective covers culture, organizational structure, leadership and workforce skills. Governance covers program management, risk and benefits; Platform covers architecture and engineering."},
+{d:1,q:"Which AWS CAF perspective focuses on making sure cloud services are delivered at a level that meets business needs, including observability, incident and problem management?",o:["Security","Operations","Governance","Business"],a:[1],e:"The Operations perspective ensures cloud services are run and supported at agreed levels: observability, event, incident and problem management, change and release management."},
+{d:1,q:"A company deploys its application on Amazon EC2 instances in two Availability Zones behind a load balancer. What is the PRIMARY benefit of this design?",o:["Lower cost than a single-AZ deployment","Compliance with data residency laws","Lower latency for users on other continents","High availability if one Availability Zone fails"],a:[3],e:"Spreading instances across multiple AZs keeps the application running if one AZ has a problem. It costs more, not less, and does nothing for residency or latency to distant continents (that's multi-Region or CloudFront)."},
+{d:1,q:"An e-commerce application automatically adds EC2 instances during a sales event and removes them when traffic drops, so the company pays only for capacity it needs. Which cloud concept does this illustrate?",o:["Elasticity","Durability","Agility","Fault tolerance"],a:[0],e:"Elasticity is the ability to automatically scale out and back in to match demand. Agility refers to how quickly teams can obtain resources and experiment."},
+{d:1,q:"A company is choosing an AWS Region for a new application. Which TWO factors should it consider? (Choose TWO.)",o:["Data residency and compliance requirements","The number of IAM users in the account","Proximity to the application's users","The AWS Support plan the account uses","The number of edge locations worldwide"],a:[0,2],e:"Region selection is driven by compliance/data residency, latency (proximity to users), service availability and pricing. IAM is global, the Support plan applies to the whole account, and edge locations are global."},
+{d:1,q:"Which of the following is a design principle of the AWS Well-Architected Framework?",o:["Provision for peak capacity at all times","Tightly couple application components to reduce latency","Stop guessing capacity needs","Make large, infrequent changes to reduce risk"],a:[2],e:"'Stop guessing capacity needs' is a general design principle, along with automating, testing at production scale and making frequent, small, reversible changes. Loose coupling, not tight coupling, is recommended."},
+{d:1,q:"A company wants to serve images and videos to users around the world with low latency by caching content close to them. Which component of the AWS global infrastructure supports this?",o:["Availability Zones","Edge locations","AWS Outposts","Virtual private gateways"],a:[1],e:"Edge locations (points of presence) are used by Amazon CloudFront to cache content close to users. AZs are part of Regions; Outposts runs AWS services in your own data center."},
+{d:1,q:"A manufacturing company needs to run AWS services inside its own factory data center to process data locally with very low latency, using the same AWS APIs and tools. Which service meets this requirement?",o:["AWS Local Zones","AWS Snowball Edge","AWS Storage Gateway","AWS Outposts"],a:[3],e:"AWS Outposts brings AWS-managed infrastructure and services into your own facility. Local Zones are AWS-owned sites near cities; Snowball Edge is a portable device for transfer and disconnected edge computing; Storage Gateway only provides hybrid storage."},
+{d:1,q:"How does AWS pass the benefits of economies of scale on to its customers?",o:["By offering lower pay-as-you-go prices","By providing dedicated hardware to every customer","By making data transfer out of AWS free","By removing the need for any capacity planning"],a:[0],e:"Because usage from hundreds of thousands of customers is aggregated, AWS achieves higher economies of scale, which translate into lower pay-as-you-go prices."},
+{d:1,q:"A company needs a disaster recovery strategy for a non-critical application. It can accept a recovery time of several hours and wants the LOWEST cost. Which strategy should it choose?",o:["Multi-site active/active","Warm standby","Backup and restore","Pilot light"],a:[2],e:"Backup and restore is the cheapest DR approach but has the longest RTO/RPO. Pilot light, warm standby and multi-site cost progressively more for faster recovery."},
+
+/* ---------- Domain 2 ---------- */
+{d:2,q:"According to the AWS shared responsibility model, which task is the customer's responsibility when using Amazon EC2?",o:["Maintaining physical security of data centers","Patching the hypervisor","Replacing failed storage hardware","Patching the guest operating system"],a:[3],e:"For EC2 (IaaS), the customer manages the guest OS, including patches, plus applications, data and security group configuration. AWS handles the facilities, hardware and virtualization layer."},
+{d:2,q:"A company uses Amazon RDS for PostgreSQL. According to the shared responsibility model, which task is AWS responsible for?",o:["Creating database users and permissions","Patching the underlying operating system and database engine","Configuring security group rules for the database","Deciding which data should be encrypted"],a:[1],e:"With managed services like RDS, AWS patches the OS and database engine. The customer still manages database users, network access (security groups) and data protection choices."},
+{d:2,q:"Which TWO controls are shared controls under the AWS shared responsibility model? (Choose TWO.)",o:["Physical and environmental controls","Patch management","Configuration management","Customer data classification","Hardware lifecycle management"],a:[1,2],e:"Shared controls include patch management, configuration management, and awareness and training: AWS does its part for infrastructure, the customer for their own resources. Physical controls are inherited from AWS; data classification is customer-specific."},
+{d:2,q:"Which task can ONLY be performed by the AWS account root user?",o:["Creating an IAM user","Enabling AWS CloudTrail","Changing the AWS Support plan","Launching an EC2 instance"],a:[2],e:"Changing or canceling the Support plan requires the root user, as do closing the account and changing the account email or root password. The other tasks can be done by IAM identities with permissions."},
+{d:2,q:"An application running on Amazon EC2 needs to read objects from an Amazon S3 bucket. What is the MOST secure way to grant this access?",o:["Store an IAM user's access keys in the application configuration","Attach an IAM role with the required permissions to the EC2 instance","Make the S3 bucket public","Use the root user's credentials in the application"],a:[1],e:"An IAM role attached to the instance provides temporary credentials that are rotated automatically. Long-term access keys on the instance, public buckets and root credentials all violate best practices."},
+{d:2,q:"An auditor asks for a copy of AWS's SOC 2 report and PCI DSS attestation. Where can the company get these documents?",o:["AWS Artifact","AWS Audit Manager","AWS Security Hub","AWS Config"],a:[0],e:"AWS Artifact provides on-demand access to AWS's compliance reports and agreements. Audit Manager collects evidence about your own AWS usage; it doesn't provide AWS's reports."},
+{d:2,q:"A company wants a service that continuously analyzes AWS CloudTrail events, VPC Flow Logs and DNS logs to detect malicious activity such as compromised instances or cryptocurrency mining. Which service should it use?",o:["Amazon Inspector","Amazon Macie","Amazon GuardDuty","AWS Trusted Advisor"],a:[2],e:"GuardDuty is the threat detection service that analyzes these log sources with ML and threat intelligence. Inspector scans for vulnerabilities; Macie finds sensitive data in S3."},
+{d:2,q:"A security team needs to automatically scan EC2 instances and container images in Amazon ECR for known software vulnerabilities (CVEs). Which service meets this need?",o:["Amazon GuardDuty","Amazon Inspector","AWS Shield","Amazon Detective"],a:[1],e:"Amazon Inspector performs automated vulnerability scanning of EC2, ECR images and Lambda functions. GuardDuty detects threats from activity logs; Detective investigates findings."},
+{d:2,q:"A company stores millions of documents in Amazon S3 and must identify which ones contain personally identifiable information (PII). Which service should it use?",o:["Amazon Macie","AWS Config","Amazon Inspector","AWS CloudTrail"],a:[0],e:"Macie uses machine learning and pattern matching to discover and protect sensitive data such as PII in S3."},
+{d:2,q:"A web application is being targeted by SQL injection and cross-site scripting attacks. Which AWS service can block these requests?",o:["AWS Shield Standard","Network ACLs","AWS WAF","Security groups"],a:[2],e:"AWS WAF inspects HTTP(S) requests at layer 7 and blocks common exploits like SQL injection and XSS. Shield protects against DDoS; security groups and NACLs filter by IP, port and protocol only."},
+{d:2,q:"A company that is frequently the target of large DDoS attacks wants 24/7 access to a DDoS response team and protection against scaling charges caused by attacks. What should it use?",o:["AWS Shield Standard","AWS Shield Advanced","AWS Firewall Manager","Amazon GuardDuty"],a:[1],e:"Shield Advanced adds the Shield Response Team, enhanced detection and DDoS cost protection. Shield Standard is free and automatic but doesn't include these features."},
+{d:2,q:"An Amazon S3 bucket was deleted and the security team needs to find out which IAM user deleted it and when. Which service provides this information?",o:["Amazon CloudWatch","AWS X-Ray","AWS Trusted Advisor","AWS CloudTrail"],a:[3],e:"CloudTrail records API calls, including who made them, when and from where. CloudWatch provides metrics and logs about performance; X-Ray traces application requests."},
+{d:2,q:"A company must track configuration changes to its AWS resources over time and automatically check whether resources comply with internal rules, such as requiring encryption on all EBS volumes. Which service should it use?",o:["AWS Config","AWS CloudTrail","Amazon Inspector","AWS Artifact"],a:[0],e:"AWS Config records configuration history and evaluates resources against Config rules. CloudTrail records API activity, not the resulting configuration state and compliance."},
+{d:2,q:"A company needs to store database credentials securely and rotate them automatically every 30 days without changing application code. Which service should it use?",o:["AWS Key Management Service (AWS KMS)","AWS Certificate Manager","AWS Systems Manager Parameter Store","AWS Secrets Manager"],a:[3],e:"Secrets Manager stores secrets and provides built-in automatic rotation, including native support for RDS. Parameter Store doesn't rotate secrets automatically; KMS manages encryption keys, not credentials."},
+{d:2,q:"A financial institution must use dedicated, single-tenant hardware security modules to generate and store its encryption keys, with AWS having no access to the keys. Which service meets this requirement?",o:["AWS KMS with AWS managed keys","AWS CloudHSM","AWS Secrets Manager","AWS Certificate Manager"],a:[1],e:"CloudHSM provides dedicated HSMs that you control exclusively. KMS uses AWS-managed, multi-tenant HSMs."},
+{d:2,q:"A company uses AWS Organizations. It needs to prevent every account in one organizational unit (OU) from using AWS services outside two approved Regions, including for administrators in those accounts. What should it use?",o:["Network ACLs in every VPC","IAM policies attached to each user","Service control policies (SCPs)","AWS Trusted Advisor checks"],a:[2],e:"SCPs set the maximum permissions for all identities in member accounts, including administrators and the account root user. IAM policies could be changed by account admins; NACLs and Trusted Advisor don't restrict API usage."},
+{d:2,q:"A company has 40 AWS accounts. Employees should sign in once with their corporate credentials and access the accounts and business applications they are assigned to. Which service should the company use?",o:["AWS IAM Identity Center","Amazon Cognito","A separate IAM user in each account","AWS Secrets Manager"],a:[0],e:"IAM Identity Center provides workforce single sign-on across AWS accounts and applications and can connect to a corporate identity provider. Cognito is for customers of your web/mobile apps."},
+{d:2,q:"Which TWO statements about security groups are correct? (Choose TWO.)",o:["They are stateful","They operate at the subnet level","They support only allow rules","They evaluate rules in numbered order","They are stateless"],a:[0,2],e:"Security groups are stateful, work at the instance (network interface) level and only support allow rules. Network ACLs are the stateless, subnet-level firewall with numbered allow and deny rules."},
+{d:2,q:"A company wants to encrypt data at rest in Amazon S3 and Amazon EBS using keys it creates, controls with key policies, and can audit in AWS CloudTrail. Which service should it use to manage the keys?",o:["AWS Certificate Manager","AWS Key Management Service (AWS KMS)","AWS Security Hub","Amazon Macie"],a:[1],e:"KMS creates and manages encryption keys integrated with S3, EBS and most other services, and every key use is logged in CloudTrail. ACM manages TLS certificates for encryption in transit."},
+{d:2,q:"A security team wants a single place to see and prioritize findings from Amazon GuardDuty, Amazon Inspector and Amazon Macie across all accounts, and to check compliance with the CIS AWS Foundations Benchmark. Which service should it use?",o:["Amazon Detective","AWS Config","AWS Audit Manager","AWS Security Hub"],a:[3],e:"Security Hub aggregates findings from AWS security services and partners and runs automated checks against standards like CIS and AWS Foundational Security Best Practices."},
+
+/* ---------- Domain 3 ---------- */
+{d:3,q:"A company wants to run code that resizes images every time a file is uploaded to an Amazon S3 bucket. It does not want to manage servers and each job finishes in a few seconds. Which service is the MOST suitable?",o:["Amazon EC2","AWS Lambda","Amazon Lightsail","AWS Batch"],a:[1],e:"Lambda runs event-driven code without servers and can be triggered directly by S3 uploads. EC2 and Lightsail require managing servers; Batch is for long-running batch workloads."},
+{d:3,q:"A development team wants to run Docker containers on AWS without provisioning, patching or scaling any servers or clusters. Which service should it use?",o:["Amazon EC2 with Docker installed","AWS Elastic Beanstalk","AWS Fargate","Amazon Lightsail"],a:[2],e:"Fargate is the serverless compute engine for containers on ECS and EKS. The other options all run on instances that must be managed at some level."},
+{d:3,q:"A company must keep financial records for 10 years to meet regulations. The records will almost never be accessed, and a retrieval time of up to 48 hours is acceptable. Which storage option is MOST cost-effective?",o:["Amazon S3 Standard-Infrequent Access","Amazon S3 Glacier Flexible Retrieval","Amazon S3 One Zone-Infrequent Access","Amazon S3 Glacier Deep Archive"],a:[3],e:"Glacier Deep Archive is the lowest-cost storage class, with retrieval within 12 hours (standard) or 48 hours (bulk). It's designed for long-term retention of rarely accessed data."},
+{d:3,q:"A company stores data in Amazon S3 but its access patterns are unpredictable: some objects are read often, others not for months. It wants to optimize cost automatically without operational overhead or retrieval fees. Which storage class should it use?",o:["S3 Intelligent-Tiering","S3 Standard","S3 Glacier Instant Retrieval","S3 One Zone-Infrequent Access"],a:[0],e:"Intelligent-Tiering automatically moves objects between access tiers as patterns change, with no retrieval fees (just a small per-object monitoring fee)."},
+{d:3,q:"Several Linux EC2 instances in different Availability Zones must read and write the same set of files at the same time. Which storage service meets this requirement?",o:["Amazon EBS","Amazon EC2 instance store","Amazon S3 Glacier","Amazon EFS"],a:[3],e:"Amazon EFS is a managed NFS file system that many Linux instances across AZs can mount concurrently. EBS volumes are tied to one AZ and generally attach to one instance; instance store is local and temporary."},
+{d:3,q:"A company needs to move 600 TB of data from its data center to AWS. Its internet connection is slow and the transfer would take months. What is the MOST efficient option?",o:["AWS Snowball Edge devices","AWS DataSync over the internet","Amazon S3 Transfer Acceleration","A new AWS Site-to-Site VPN connection"],a:[0],e:"For hundreds of terabytes over a slow connection, shipping data on Snowball Edge devices is fastest. DataSync, Transfer Acceleration and VPN all depend on the same limited bandwidth."},
+{d:3,q:"An application on Amazon RDS is slow because of a very high volume of read queries. Which option improves read performance?",o:["Enable Multi-AZ deployment","Create one or more read replicas","Enable automated backups","Move the database to a larger EBS volume type"],a:[1],e:"Read replicas serve read traffic and offload the primary. Multi-AZ provides a synchronous standby for high availability and doesn't serve reads."},
+{d:3,q:"A gaming company needs a fully managed, serverless NoSQL database that delivers single-digit millisecond performance at any scale for player session data. Which service should it use?",o:["Amazon RDS","Amazon Redshift","Amazon DynamoDB","Amazon Neptune"],a:[2],e:"DynamoDB is a serverless key-value and document database with consistent single-digit millisecond latency. RDS is relational, Redshift is a data warehouse, Neptune is a graph database."},
+{d:3,q:"A company wants to run complex analytical SQL queries across petabytes of historical sales data for business intelligence reporting. Which service is designed for this?",o:["Amazon Redshift","Amazon DynamoDB","Amazon ElastiCache","Amazon RDS for MySQL"],a:[0],e:"Redshift is a columnar data warehouse built for OLAP workloads on large data sets. RDS is optimized for transactional (OLTP) workloads."},
+{d:3,q:"Data analysts want to run ad hoc SQL queries directly against log files stored in Amazon S3 without loading the data into a database or managing any infrastructure. Which service should they use?",o:["Amazon EMR","Amazon Redshift","AWS Glue","Amazon Athena"],a:[3],e:"Athena is a serverless, interactive query service that runs SQL directly on data in S3 and charges per data scanned. Redshift requires a cluster or loading data; EMR runs big data frameworks; Glue is for ETL."},
+{d:3,q:"A company needs to distribute incoming HTTPS traffic across EC2 instances in multiple Availability Zones and route requests to different target groups based on the URL path (for example /api and /images). Which service should it use?",o:["Network Load Balancer","Application Load Balancer","Gateway Load Balancer","Amazon Route 53 simple routing"],a:[1],e:"The Application Load Balancer works at layer 7 and supports path- and host-based routing. NLB works at layer 4; GWLB is for inserting third-party network appliances."},
+{d:3,q:"A media company wants to deliver static website content and videos to a global audience with low latency, caching the content close to viewers. Which service should it use?",o:["AWS Global Accelerator","AWS Direct Connect","Amazon CloudFront","Amazon Route 53"],a:[2],e:"CloudFront is a CDN that caches content at edge locations. Global Accelerator improves routing over the AWS network but doesn't cache content."},
+{d:3,q:"A company needs a dedicated, private network connection between its on-premises data center and AWS that provides consistent bandwidth and does not travel over the public internet. Which service meets these requirements?",o:["AWS Site-to-Site VPN","AWS Direct Connect","VPC peering","Amazon CloudFront"],a:[1],e:"Direct Connect is a dedicated private connection with consistent performance. Site-to-Site VPN is encrypted but runs over the public internet."},
+{d:3,q:"EC2 instances in a private subnet must download software updates from the internet, but must not accept connections that start from the internet. What should be added to the VPC?",o:["An internet gateway route in the private subnet's route table","A security group rule that allows all inbound traffic","A VPC gateway endpoint for Amazon S3","A NAT gateway in a public subnet"],a:[3],e:"A NAT gateway lets private instances initiate outbound connections while blocking unsolicited inbound traffic. Routing the private subnet to an internet gateway would make it public."},
+{d:3,q:"An order-processing system receives orders faster than the backend can process them during peak times. The company wants to decouple the components so that orders are stored reliably until workers can process them. Which service should it use?",o:["Amazon SQS","Amazon SNS","Amazon CloudWatch","AWS Step Functions"],a:[0],e:"SQS is a fully managed message queue that buffers messages until consumers process them. SNS pushes messages to subscribers immediately and doesn't hold them for later processing."},
+{d:3,q:"When a critical event occurs, an application must send the same message to an email address, an SMS number and an AWS Lambda function at the same time. Which service is designed for this?",o:["Amazon SQS","Amazon SNS","Amazon MQ","Amazon SES"],a:[1],e:"SNS is a pub/sub service that fans out one message to many subscribers of different types (email, SMS, Lambda, SQS, HTTP). SES only sends email."},
+{d:3,q:"A company wants to create identical copies of its infrastructure in several AWS Regions using templates that can be version-controlled and reviewed. Which service should it use?",o:["AWS Elastic Beanstalk","AWS Systems Manager","AWS Config","AWS CloudFormation"],a:[3],e:"CloudFormation provisions infrastructure from JSON or YAML templates (infrastructure as code), making deployments repeatable across Regions and accounts."},
+{d:3,q:"A developer wants to deploy a Java web application by uploading the code, and have AWS automatically handle capacity provisioning, load balancing, auto scaling and health monitoring. Which service should the developer use?",o:["AWS Elastic Beanstalk","AWS CloudFormation","Amazon EC2","AWS CodeCommit"],a:[0],e:"Elastic Beanstalk is a PaaS: upload code and it provisions and manages the underlying resources. CloudFormation requires you to define all resources yourself."},
+{d:3,q:"An operations team needs to be notified when the average CPU utilization of its EC2 instances stays above 80% for 10 minutes. Which service should it use?",o:["AWS CloudTrail","AWS Trusted Advisor","Amazon CloudWatch","AWS Health Dashboard"],a:[2],e:"CloudWatch collects EC2 metrics and alarms can notify through SNS when a threshold is breached. CloudTrail logs API calls; the Health Dashboard reports AWS-side events."},
+{d:3,q:"A call center wants to convert recorded customer calls into text and then determine whether each customer's sentiment was positive or negative. Which TWO services should it use? (Choose TWO.)",o:["Amazon Polly","Amazon Transcribe","Amazon Comprehend","Amazon Rekognition","Amazon Translate"],a:[1,2],e:"Transcribe converts speech to text, and Comprehend performs natural language processing such as sentiment analysis. Polly does the opposite of Transcribe (text to speech); Rekognition analyzes images and video."},
+{d:3,q:"A company wants to build a generative AI chatbot using foundation models from several providers through a single API, without managing any infrastructure. Which service should it use?",o:["Amazon SageMaker Ground Truth","Amazon Rekognition","Amazon Kendra","Amazon Bedrock"],a:[3],e:"Bedrock gives serverless API access to foundation models from Amazon and third parties for building generative AI applications. Ground Truth is for labeling training data."},
+
+/* ---------- Domain 4 ---------- */
+{d:4,q:"A company runs a database on Amazon EC2 24 hours a day, every day, and expects to keep it running for at least three years without changing the instance type. Which purchasing option is the MOST cost-effective?",o:["On-Demand Instances","Spot Instances","Reserved Instances with a 3-year term","Dedicated Hosts"],a:[2],e:"Reserved Instances give the largest discount for steady, predictable usage with a 1- or 3-year commitment. Spot can be interrupted, which doesn't suit a database."},
+{d:4,q:"A company needs to run large batch processing jobs that can be stopped and restarted at any time without problems. Which EC2 purchasing option is the MOST cost-effective?",o:["Spot Instances","On-Demand Instances","Reserved Instances","Dedicated Instances"],a:[0],e:"Spot Instances offer up to 90% off for fault-tolerant, interruptible workloads such as batch processing."},
+{d:4,q:"Before building anything, a company wants to estimate the monthly cost of a proposed architecture using EC2, RDS and S3. Which tool should it use?",o:["AWS Cost Explorer","AWS Pricing Calculator","AWS Budgets","AWS Cost and Usage Report"],a:[1],e:"The Pricing Calculator estimates costs for planned workloads. Cost Explorer, Budgets and the CUR work with actual usage after resources exist."},
+{d:4,q:"A company wants to receive an email alert when its forecasted AWS spending for the month is expected to exceed $5,000. Which service should it use?",o:["AWS Pricing Calculator","AWS Trusted Advisor","AWS Cost Explorer","AWS Budgets"],a:[3],e:"AWS Budgets sends alerts when actual or forecasted costs exceed a threshold. Cost Explorer is for analysis and forecasting, not threshold alerts."},
+{d:4,q:"A company needs 24/7 phone access to AWS Cloud Support Engineers and a response time of less than 1 hour when its production system is down. Which is the LEAST expensive Support plan that meets these requirements?",o:["Developer","Business","Enterprise On-Ramp","Enterprise"],a:[1],e:"Business Support is the lowest tier with 24/7 phone, email and chat access and a <1 hour response for production system down. Developer only offers business-hours email."},
+{d:4,q:"Which AWS Support plan includes a designated Technical Account Manager (TAM)?",o:["Business","Enterprise On-Ramp","Enterprise","Developer"],a:[2],e:"Only Enterprise Support includes a designated TAM. Enterprise On-Ramp provides access to a pool of TAMs."},
+{d:4,q:"Which TWO are benefits of consolidated billing in AWS Organizations? (Choose TWO.)",o:["A single bill for all accounts in the organization","A free upgrade to Business Support","Combined usage across accounts for volume pricing discounts","Separate Free Tier allowances for unlimited new accounts","Automatic encryption of all resources"],a:[0,2],e:"Consolidated billing provides one bill and aggregates usage across accounts so the organization reaches volume pricing tiers sooner; RI and Savings Plans discounts can also be shared."},
+{d:4,q:"A company wants to bring existing software licenses that are billed per physical CPU socket to AWS. Which EC2 option gives it visibility into sockets and cores to use these licenses?",o:["Dedicated Instances","Spot Instances","On-Demand Instances","Dedicated Hosts"],a:[3],e:"Dedicated Hosts are physical servers dedicated to you with visibility into sockets and cores, which is required for server-bound licenses. Dedicated Instances run on single-tenant hardware but without that visibility."}
+];
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const L="ABCDE";
+const SK="clf-exam-state-v1",HK="clf-exam-history-v1";
+const load=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const store=(k,v)=>{try{v===null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};
+const same=(x,y)=>x&&x.length===y.length&&x.every(v=>y.includes(v));
+try{const t=localStorage.getItem("clf-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}
+
+let st=null,tick=null,rFilter="wrong";
+
+function show(v){["start","run","result"].forEach(x=>$(x).hidden=x!==v);window.scrollTo(0,0);}
+
+/* ---------- start ---------- */
+function renderStart(){
+  $("dombar").innerHTML=Object.entries(DOM).map(([k,v])=>{const n=Q.filter(q=>q.d==k).length;return `<div class="dom" style="--dc:var(--d${k});--w:${v.w}"><span class="pct">${v.w}%</span><span class="dn">${v.n} (${n} questions)</span></div>`}).join("");
+  const saved=load(SK,null);
+  if(saved&&!saved.done){
+    const n=Object.keys(saved.ans).length;
+    let t=`Unfinished ${saved.mode==="exam"?"exam":"practice"} attempt: ${n} of ${saved.order.length} answered`;
+    if(saved.mode==="exam"){const left=saved.end-Date.now();t+=left>0?`, ${Math.ceil(left/60000)} minutes left.`:", time is up.";}else t+=".";
+    $("resumeText").textContent=t;$("resume").hidden=false;
+  }else $("resume").hidden=true;
+  if(saved&&saved.done){st=saved;const r=score();$("lastResText").textContent=`Your last ${saved.mode==="exam"?"exam":"practice"} attempt: ${r.right} of ${r.total} correct (${r.pct}%).`;$("lastRes").hidden=false;}else $("lastRes").hidden=true;
+  const h=load(HK,[]);
+  if(h.length){
+    $("hist").hidden=false;
+    $("histTable").innerHTML=`<table><thead><tr><th>Date</th><th>Mode</th><th>Score</th>${[1,2,3,4].map(d=>`<th>D${d}</th>`).join("")}</tr></thead><tbody>${h.slice(-10).reverse().map(r=>`<tr><td>${new Date(r.date).toLocaleDateString()}</td><td>${r.mode==="exam"?"Exam":"Practice"}</td><td><b>${r.pct}%</b> (${r.right}/${r.total})</td>${[1,2,3,4].map(d=>`<td>${r.dom[d]!=null?r.dom[d]+"%":"–"}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  }else $("hist").hidden=true;
+}
+
+function begin(mode,subset){
+  const idx=subset||Q.map((_,i)=>i);
+  const order=$("optShufQ").checked?shuffle(idx):idx.slice();
+  const perm={};order.forEach(i=>{const p=Q[i].o.map((_,j)=>j);perm[i]=$("optShufA").checked?shuffle(p):p;});
+  st={mode,order,perm,ans:{},flag:{},checked:{},pos:0,end:mode==="exam"?Date.now()+Math.round(90*60000*order.length/65):null,done:false};
+  store(SK,st);startRun();
+}
+function startRun(){show("run");$("map").open=false;renderQ();renderGrid();startTimer();$("finishBtn").textContent=st.mode==="exam"?"Finish exam":"Finish and see results";}
+
+/* ---------- run ---------- */
+function startTimer(){
+  clearInterval(tick);
+  if(st.mode!=="exam"){$("timer").textContent="";return;}
+  const upd=()=>{const left=st.end-Date.now();if(left<=0){$("timer").textContent="0:00";clearInterval(tick);finish(true);return;}
+    const m=Math.floor(left/60000),s=Math.floor(left%60000/1000);$("timer").textContent=`${m}:${String(s).padStart(2,"0")}`;$("timer").classList.toggle("low",left<600000);};
+  upd();tick=setInterval(upd,1000);
+}
+function renderQ(){
+  const qi=st.order[st.pos],q=Q[qi],multi=q.a.length>1,sel=st.ans[qi]||[],chk=st.mode==="practice"&&st.checked[qi];
+  $("count").textContent=`Question ${st.pos+1} of ${st.order.length}`;
+  $("pfill").style.width=(100*Object.keys(st.ans).length/st.order.length)+"%";
+  let h=`<div class="qmeta"><span class="dchip" style="--dc:var(--d${q.d})">Domain ${q.d}: ${DOM[q.d].n}</span><button class="tbtn flag" id="flagBtn" aria-pressed="${!!st.flag[qi]}">${st.flag[qi]?"Flagged":"Flag for review"}</button></div>`;
+  h+=`<p class="qtext">${esc(q.q.replace(/\s*\(Choose TWO\.\)/,""))}</p>${multi?`<p class="choose">Choose TWO.</p>`:""}<div class="olist" role="${multi?"group":"radiogroup"}">`;
+  st.perm[qi].forEach((oi,k)=>{
+    const on=sel.includes(oi);let cls="opt"+(multi?" multi":"")+(on?" sel":"");
+    if(chk){cls+=" locked";if(q.a.includes(oi))cls+=" right";else if(on)cls+=" wrong";}
+    h+=`<label class="${cls}"><input type="${multi?"checkbox":"radio"}" name="o" value="${oi}" ${on?"checked":""} ${chk?"disabled":""}><span class="ltr">${L[k]}</span><span>${esc(q.o[oi])}</span></label>`;
+  });
+  h+="</div>";
+  if(chk){const ok=same(sel,q.a);h+=`<div class="fb" style="--fbc:var(${ok?"--ok":"--bad"})"><b class="v">${ok?"Correct":"Not quite"}</b><p>${esc(q.e)}</p></div>`;}
+  const last=st.pos===st.order.length-1;
+  h+=`<div class="nav"><button class="tbtn" id="prevBtn" ${st.pos===0?"disabled":""}>Previous</button><span class="sp"></span>`;
+  if(st.mode==="practice"&&!chk)h+=`<button class="tbtn primary" id="checkBtn" ${sel.length?"":"disabled"}>Check answer</button>`;
+  h+=last?`<button class="tbtn ${st.mode==="exam"||chk?"primary":""}" id="endBtn">Finish</button>`:`<button class="tbtn ${st.mode==="exam"||chk?"primary":""}" id="nextBtn">Next</button>`;
+  h+="</div>";
+  $("qcard").innerHTML=h;
+  $("qcard").querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>choose(+inp.value)));
+  $("flagBtn").onclick=toggleFlag;
+  $("prevBtn").onclick=()=>go(st.pos-1);
+  if($("nextBtn"))$("nextBtn").onclick=()=>go(st.pos+1);
+  if($("endBtn"))$("endBtn").onclick=()=>finish(false);
+  if($("checkBtn"))$("checkBtn").onclick=check;
+}
+function choose(oi){
+  const qi=st.order[st.pos],q=Q[qi];
+  if(st.mode==="practice"&&st.checked[qi])return;
+  let s=st.ans[qi]||[];
+  if(q.a.length>1)s=s.includes(oi)?s.filter(x=>x!==oi):[...s,oi];else s=[oi];
+  if(s.length)st.ans[qi]=s;else delete st.ans[qi];
+  store(SK,st);renderQ();renderGrid();
+  const inp=$("qcard").querySelector(`input[value="${oi}"]`);if(inp)inp.focus({preventScroll:true});
+}
+function check(){const qi=st.order[st.pos];if(!st.ans[qi])return;st.checked[qi]=true;store(SK,st);renderQ();renderGrid();}
+function toggleFlag(){const qi=st.order[st.pos];st.flag[qi]?delete st.flag[qi]:st.flag[qi]=true;store(SK,st);renderQ();renderGrid();}
+function go(p){if(p<0||p>=st.order.length)return;st.pos=p;store(SK,st);renderQ();renderGrid();window.scrollTo({top:0});}
+function renderGrid(){
+  $("grid").innerHTML=st.order.map((qi,i)=>{
+    let c="";if(st.ans[qi])c="ans";
+    if(st.mode==="practice"&&st.checked[qi])c=same(st.ans[qi],Q[qi].a)?"ok":"no";
+    if(st.flag[qi])c+=" fl";if(i===st.pos)c+=" cur";
+    return `<button class="${c}" data-p="${i}" aria-label="Question ${i+1}">${i+1}</button>`;}).join("");
+  $("grid").querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.p));
+  const a=Object.keys(st.ans).length,f=Object.keys(st.flag).length;
+  $("legend").textContent=`${a} answered, ${st.order.length-a} unanswered, ${f} flagged`;
+}
+function finish(auto){
+  if(!auto){
+    const un=st.order.length-Object.keys(st.ans).length,f=Object.keys(st.flag).length;
+    let msg="Finish and see your results?";
+    if(un)msg=`${un} question${un>1?"s are":" is"} unanswered and will count as wrong.`+(f?` ${f} flagged.`:"")+" Finish anyway?";
+    else if(f)msg=`You still have ${f} flagged question${f>1?"s":""}. Finish anyway?`;
+    if(!confirm(msg))return;
+  }
+  clearInterval(tick);st.done=true;
+  const res=score();
+  const h=load(HK,[]);h.push({date:Date.now(),mode:st.mode,right:res.right,total:res.total,pct:res.pct,dom:res.domPct});store(HK,h.slice(-50));
+  store(SK,st);renderResult(res);
+}
+function score(){
+  let right=0;const dr={},dt={};
+  st.order.forEach(qi=>{const q=Q[qi];dt[q.d]=(dt[q.d]||0)+1;if(same(st.ans[qi],q.a)){right++;dr[q.d]=(dr[q.d]||0)+1;}});
+  const domPct={};Object.keys(dt).forEach(d=>domPct[d]=Math.round(100*(dr[d]||0)/dt[d]));
+  return {right,total:st.order.length,pct:Math.round(100*right/st.order.length),dr,dt,domPct};
+}
+
+/* ---------- results ---------- */
+function renderResult(res){
+  show("result");
+  $("copyBox").hidden=true;
+  $("rPct").textContent=res.pct+"%";
+  $("rRaw").textContent=`${res.right} of ${res.total} correct`;
+  const weak=Object.keys(res.domPct).sort((a,b)=>res.domPct[a]-res.domPct[b])[0];
+  let v;
+  if(res.pct>=80)v=`<b style="--vc:var(--ok)">Comfortably ready.</b> `;
+  else if(res.pct>=70)v=`<b style="--vc:var(--warn)">Borderline.</b> The real exam's 700/1000 scaled score roughly corresponds to 70% correct, but it isn't an exact conversion. Aim for 75–80% in practice to have a margin. `;
+  else v=`<b style="--vc:var(--bad)">Not there yet.</b> Review the explanations below and aim for 75–80% before booking. `;
+  if(res.total>=20&&weak)v+=`Your weakest area was Domain ${weak} (${DOM[weak].n}) at ${res.domPct[weak]}%.`;
+  $("rVerdict").innerHTML=v;
+  $("rDom").innerHTML=Object.keys(res.dt).sort().map(d=>`<div class="drow" style="--dc:var(--d${d})"><span>D${d} ${DOM[d].n} (${res.dr[d]||0}/${res.dt[d]})</span><div class="tr"><div style="width:${res.domPct[d]}%"></div></div><span class="pc">${res.domPct[d]}%</span></div>`).join("");
+  const wrong=st.order.filter(qi=>!same(st.ans[qi],Q[qi].a));
+  $("wrongBtn").hidden=!wrong.length;
+  $("wrongBtn").textContent=`Retake the ${wrong.length} I missed`;
+  rFilter=wrong.length?"wrong":"all";
+  syncFilter();renderReview();
+}
+function syncFilter(){$("rFilter").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.f===rFilter)));}
+function renderReview(){
+  const list=st.order.map((qi,i)=>({qi,i})).filter(({qi})=>{
+    if(rFilter==="wrong")return !same(st.ans[qi],Q[qi].a);
+    if(rFilter==="flag")return !!st.flag[qi];return true;});
+  $("rList").innerHTML=list.length?list.map(({qi,i})=>{
+    const q=Q[qi],sel=st.ans[qi]||[],ok=same(sel,q.a);
+    const lis=st.perm[qi].map((oi,k)=>{const c=q.a.includes(oi),y=sel.includes(oi);
+      return `<li class="${c?"c":y?"w":""}">${L[k]}. ${esc(q.o[oi])}${c?`<span class="tg">Correct</span>`:""}${y&&!c?`<span class="tg">Your answer</span>`:""}${y&&c?`<span class="tg">(yours)</span>`:""}</li>`}).join("");
+    return `<article class="rev" style="--rc:var(${ok?"--ok":"--bad"})"><h3><span>Question ${i+1}</span><span>Domain ${q.d}</span><span>${ok?"Correct":sel.length?"Wrong":"Unanswered"}</span>${st.flag[qi]?"<span>Flagged</span>":""}</h3><p class="qt">${esc(q.q)}</p><ul>${lis}</ul><p class="ex">${esc(q.e)}</p></article>`;
+  }).join(""):`<p class="hint">Nothing to show here.${rFilter==="wrong"?" You got everything right.":""}</p>`;
+}
+
+/* ---------- wiring ---------- */
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{const s=load(SK,null);if(s&&!s.done&&!confirm("This replaces your unfinished attempt. Continue?"))return;begin(b.dataset.mode);});
+$("resumeBtn").onclick=()=>{st=load(SK,null);if(!st)return;if(st.mode==="exam"&&st.end<=Date.now()){finish(true);return;}startRun();};
+$("discardBtn").onclick=()=>{store(SK,null);renderStart();};
+$("exitBtn").onclick=()=>{clearInterval(tick);store(SK,st);renderStart();show("start");};
+$("finishBtn").onclick=()=>finish(false);
+$("againBtn").onclick=()=>begin(st.mode);
+$("wrongBtn").onclick=()=>begin("practice",st.order.filter(qi=>!same(st.ans[qi],Q[qi].a)));
+$("lastResBtn").onclick=()=>{st=load(SK,null);if(st&&st.done)renderResult(score());};
+$("copyBtn").onclick=async()=>{
+  const wrong=st.order.map((qi,i)=>({qi,i})).filter(({qi})=>!same(st.ans[qi],Q[qi].a));
+  const r=score();
+  let t=`CLF-C02 practice exam: ${r.right}/${r.total} (${r.pct}%). By domain: `+Object.keys(r.domPct).sort().map(d=>`D${d} ${r.domPct[d]}%`).join(", ")+`\n\nQuestions I got wrong (${wrong.length}):\n`;
+  wrong.forEach(({qi},n)=>{const q=Q[qi],sel=st.ans[qi]||[];t+=`\n${n+1}. [Domain ${q.d}] ${q.q}\n   My answer: ${sel.length?sel.map(o=>q.o[o]).join(" + "):"(unanswered)"}\n   Correct: ${q.a.map(o=>q.o[o]).join(" + ")}\n`;});
+  $("copyTa").value=t;$("copyBox").hidden=false;
+  try{await navigator.clipboard.writeText(t);$("copyMsg").textContent="Copied. Paste it into the chat with Claude.";}
+  catch(e){$("copyTa").focus();$("copyTa").select();$("copyMsg").textContent="Your browser blocked automatic copying. The text is selected below: press Ctrl+C (Cmd+C on Mac), then paste it into the chat.";}
+};
+$("homeBtn").onclick=()=>{renderStart();show("start");};
+$("rFilter").querySelectorAll("button").forEach(b=>b.onclick=()=>{rFilter=b.dataset.f;syncFilter();renderReview();});
+document.addEventListener("keydown",e=>{
+  if($("run").hidden||e.metaKey||e.ctrlKey||e.altKey)return;
+  const k=e.key.toUpperCase(),qi=st.order[st.pos],q=Q[qi];
+  if(L.includes(k)&&k.length===1){const n=L.indexOf(k);if(n<q.o.length){e.preventDefault();choose(st.perm[qi][n]);}}
+  else if(k==="F"){toggleFlag();}
+  else if(e.key==="ArrowRight"){go(st.pos+1);}
+  else if(e.key==="ArrowLeft"){go(st.pos-1);}
+  else if(e.key==="Enter"&&st.mode==="practice"&&e.target.tagName!=="BUTTON"){e.preventDefault();if(!st.checked[qi])check();else go(st.pos+1);}
+});
+window.addEventListener("beforeunload",()=>{if(st&&!st.done)store(SK,st);});
+renderStart();
+</script>
+</body>
+</html>
